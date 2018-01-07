@@ -14,13 +14,13 @@ public class User {
 
     }
 
-    private User (String email, String username, int address) {
+    public User (String email, String username, int address) {
         this.email = email;
         this.username = username;
         this.address = address;
     }
 
-    private User (String email, String username, int address, int phone)
+    public User (String email, String username, int address, int phone)
     {
         this.email = email;
         this.username = username;
