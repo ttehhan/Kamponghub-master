@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Kamponghub</string>
+    <string name="google_maps_api_key">AIzaSyD8EgP1fkV57Xgf9FzxdHp0pGp4AduZN1I</string>
+    <string name="facebook_app_id">1970901759835764</string>
+    <string name="fb_login_protocol_scheme">fb1970901759835764</string>
+    <string name="r_email">Email</string>
+    <string name="r_username">Username</string>
+    <string name="r_password">Password</string>
+    <string name="r_address">Zipcode</string>
+    <string name="r_phone">Phone Number</string>
+    <string name="registerBtn">Sign up</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_store">Stores</string>
+    <string name="title_chat">Chats</string>
+    <string name="title_bookmark">Bookmarks</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_sample_action_bar">SampleActionBar</string>
+</resources>
