@@ -120,8 +120,8 @@ public class ShopListingFragment extends Fragment {
                 viewHolder.bindToList(model,new View.OnClickListener(){
                     @Override
                     public void onClick(View chatView) {
-                        Toast.makeText(getActivity(),model.getShopname(),Toast.LENGTH_SHORT).show();
-                     }
+                        Toast.makeText(getActivity(),model.getShopName(),Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         };
@@ -155,7 +155,7 @@ public class ShopListingFragment extends Fragment {
     }
 
     //TODO: Method necessary to tweak query in later stage (i.e. make this abstract class)
-   // public abstract Query getQuery(DatabaseReference databaseReference);
+    // public abstract Query getQuery(DatabaseReference databaseReference);
 
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {

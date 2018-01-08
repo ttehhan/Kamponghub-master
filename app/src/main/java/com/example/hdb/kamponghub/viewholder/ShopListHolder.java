@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.hdb.kamponghub.R;
 import com.example.hdb.kamponghub.models.Shop;
+import com.example.hdb.kamponghub.utilities.Calculations;
 import com.squareup.picasso.Picasso;
 
 //import com.google.firebase.storage.FirebaseStorage;
@@ -27,7 +28,7 @@ public class ShopListHolder extends RecyclerView.ViewHolder{
 
     public ShopListHolder(View itemView) {
         super(itemView);
-       shopImage = (ImageView)itemView.findViewById(R.id.shopImage);
+        shopImage = (ImageView)itemView.findViewById(R.id.shopImage);
         shopName = (TextView)itemView.findViewById(R.id.shopName);
         shopIsOpen = (TextView)itemView.findViewById(R.id.isShopOpen);
         shopTime = (TextView)itemView.findViewById(R.id.shopTime);
@@ -35,11 +36,10 @@ public class ShopListHolder extends RecyclerView.ViewHolder{
 
     }
     public void bindToList(Shop shop,View.OnClickListener chatClickListener) {
-        setShopName(shop.getShopname());
+        setShopName(shop.getShopName());
         setImage(shop.getShopImageUrl());
-
-       setShopOpen("T1","T2");
-       setTime("T1","T2");
+        setShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200");
+        setTime(shop.getTimeStart(),shop.getTimeEnd());
         setDistance("A","B");
 
     }
@@ -50,23 +50,20 @@ public class ShopListHolder extends RecyclerView.ViewHolder{
 
     public void setImage(String imageUrl)
     {
-
         Picasso.with(itemView.getContext())
                 .load(imageUrl)
                 .into(shopImage);
     }
-    public void setShopOpen(String timeStart, String timeEnd){
+    public void setShopOpen(String timeStart, String timeEnd, String currentTime){
         //TODO: Calculate is shop open
-        //Parse string to Integer and calculate
-        shopIsOpen.setText("Open");
+        shopIsOpen.setText(Calculations.calcShopOpen(timeStart,timeEnd,currentTime));
+
     }
     public void setTime(String timeStart, String timeEnd){
-        //TODO: Calculate time span
-        //Parse string to Integer and calculate
-        shopTime.setText("9am to 9pm");
+        shopTime.setText(Calculations.calcTime(timeStart,timeEnd));
     }
     public void setDistance(String currentDistance, String shopCoordinates){
         //TODO: Need to calculate distance based on current coordinates and shop coordinates
-        shopDistance.setText("1km");
+        shopDistance.setText(Calculations.calcDistance(currentDistance,shopCoordinates));
     }
 }
