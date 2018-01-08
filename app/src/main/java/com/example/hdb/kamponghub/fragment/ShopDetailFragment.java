@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.hdb.kamponghub.R;
 import com.example.hdb.kamponghub.models.Shop;
+import com.example.hdb.kamponghub.utilities.Calculations;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +35,7 @@ public class ShopDetailFragment extends Fragment{
     private static final String TAG = ShopDetailFragment.class.getSimpleName();
     public static final String SHOP_DETAIL_KEY = "shop_detail_key";
 
+
     //Layout
     private ImageView shopImage;
     private TextView shopName;
@@ -46,7 +48,8 @@ public class ShopDetailFragment extends Fragment{
     //Firebase variables
     private DatabaseReference mShopReference;
     private String mShopKey;
-
+    private String shopLatitude;
+    private  String shopLongtitude;
 
     //Model
     Shop shop;
@@ -59,6 +62,12 @@ public class ShopDetailFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_shop_detail, container, false);
+
+        //Set progress dialog
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading data.");
+        dialog.show();
+
         // Get shop key from intent
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -71,10 +80,6 @@ public class ShopDetailFragment extends Fragment{
         // Initialize Database
         mShopReference = FirebaseDatabase.getInstance().getReference()
                 .child("shops").child(mShopKey);
-        dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Loading data.");
-        dialog.show();
-
 
         // Initialize Views
         shopImage = rootView.findViewById(R.id.shopImage);
@@ -83,21 +88,33 @@ public class ShopDetailFragment extends Fragment{
         shopTime = rootView.findViewById(R.id.shopTime);
         shopAddress=rootView.findViewById(R.id.shopAddress);
 
-
         //Get data
         // Attach a listener to read the data at shops reference
         mShopReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                 Shop shop = dataSnapshot.getValue(Shop.class);
-                  setImage(shop.getShopImageUrl());
-                 shopName.setText(shop.getShopname());
-                isShopOpen.setText("Function to calculate");
-                shopTime.setText("Function to calculate");
-                  shopAddress.setText(shop.getShopAddress());
+                Shop shop = dataSnapshot.getValue(Shop.class);
+                setImage(shop.getShopImageUrl());
+                shopName.setText(shop.getShopName());
+                isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));
+                shopTime.setText(Calculations.calcTime(shop.getTimeStart(),shop.getTimeEnd()));
+                shopAddress.setText(shop.getShopAddress());
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
+                shopLatitude = shop.getShopLatitude();
+                shopLongtitude = shop.getShopLongitude();
+
+                fragment = new MapsFragment();
+
+                if (shopLatitude!=null && shopLongtitude!=null){
+                    Bundle bundle = new Bundle();
+                    bundle.putString(MapsFragment.SHOP_LATITUDE_KEY, shopLatitude);
+                    bundle.putString(MapsFragment.SHOP_LONGTITUDE_KEY,shopLongtitude);
+                    fragment.setArguments(bundle);
+                }
+
+                goChildFragment(fragment,R.id.childFragmentContainer);
             }
 
             @Override
@@ -110,15 +127,13 @@ public class ShopDetailFragment extends Fragment{
                 // [END_EXCLUDE]
             }
         });
-               return rootView;
+        return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-         fragment = new MapsFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.childFragmentContainer, fragment).commit();
+
     }
 
     @Override
@@ -144,7 +159,7 @@ public class ShopDetailFragment extends Fragment{
     }
 
     //TODO: Method necessary to tweak query in later stage (i.e. make this abstract class)
-   // public abstract Query getQuery(DatabaseReference databaseReference);
+    // public abstract Query getQuery(DatabaseReference databaseReference);
 
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
@@ -158,14 +173,6 @@ public class ShopDetailFragment extends Fragment{
         return recentStoreQuery;
     }
 
-    private void goFragment(Fragment fragment){
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        //For replace: refers to the FrameLayout in "content_main"
-        ft.replace(R.id.screen_area,fragment)
-                .addToBackStack(null)
-                .commit();
-    }
 
     public void setImage(String imageUrl)
     {
@@ -174,4 +181,9 @@ public class ShopDetailFragment extends Fragment{
                 .into(shopImage);
     }
 
+    public void goChildFragment(Fragment fragment, int toReplace){
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(toReplace, fragment).commit();
     }
+
+}

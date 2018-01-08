@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class NavigationActivity extends AppCompatActivity {
+public class NavigationActivity extends AppCompatActivity{
 
     //private TextView mTextMessage;
    // private ImageButton chatBtn;
@@ -116,7 +117,7 @@ public class NavigationActivity extends AppCompatActivity {
                 // mTextMessage.setText(R.string.title_profile);
                 Toast.makeText(NavigationActivity.this, "Profile", Toast.LENGTH_SHORT).show();
                 fragment= new ProfileFragment();
-                goFragment(fragment);
+                goFragment(fragment,R.id.screen_area);
                 return true;
             case R.id.menu_logout:
                 logOut();
@@ -125,7 +126,7 @@ public class NavigationActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_maps:
                 fragment= new MapsFragment();
-                goFragment(fragment);
+                goFragment(fragment,R.id.screen_area);
                 return true;
             //return super.onOptionsItemSelected(item);
         }
@@ -144,32 +145,33 @@ public class NavigationActivity extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_chat);
                     Toast.makeText(NavigationActivity.this, "Store", Toast.LENGTH_SHORT).show();
                     fragment= new ShopListingFragment();
-                    goFragment(fragment);
+                    goFragment(fragment,R.id.screen_area);
                     return true;
 
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
                     fragment= new ChatFragment();
-                    goFragment(fragment);
+                    goFragment(fragment,R.id.screen_area);
                     return true;
                 case R.id.navigation_bookmark:
                    // mTextMessage.setText(R.string.title_bookmark);
                     Toast.makeText(NavigationActivity.this, "Bookmark", Toast.LENGTH_SHORT).show();
                    fragment = new BookMarkFragment();
-                    goFragment(fragment);
+                    goFragment(fragment,R.id.screen_area);
                     return true;
 
             }
             return false;
         }
     };
-    private void goFragment(Fragment fragment){
+    public void goFragment(Fragment fragment, int toReplace){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         //For replace: refers to the FrameLayout in "content_main"
-        ft.replace(R.id.screen_area,fragment)
+        ft.replace(toReplace,fragment)
                 .addToBackStack(null)
                 .commit();
     }
+
 }

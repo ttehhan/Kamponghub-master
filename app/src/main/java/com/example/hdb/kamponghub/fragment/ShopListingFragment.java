@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
+import com.example.hdb.kamponghub.adapter.MyAdapter;
 import com.example.hdb.kamponghub.models.Shop;
 import com.example.hdb.kamponghub.viewholder.ShopListHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -36,7 +38,7 @@ public class ShopListingFragment extends Fragment {
     //Layout
     private RecyclerView rvShopList;
     private LinearLayoutManager layoutManager;
-    private FirebaseRecyclerAdapter<Shop, ShopListHolder> mFirebaseAdapter;
+    private MyAdapter mFirebaseAdapter;
     private ProgressDialog dialog;
 
     //Firebase variables
@@ -85,7 +87,7 @@ public class ShopListingFragment extends Fragment {
                 .build();
 
         //Configure adapter
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Shop, ShopListHolder>(options) {
+        mFirebaseAdapter = new MyAdapter(options,this) {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();
@@ -93,37 +95,7 @@ public class ShopListingFragment extends Fragment {
                     dialog.dismiss();
                 }
             }
-            @Override
-            public ShopListHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                return new ShopListHolder(inflater.inflate(R.layout.shop_list_item, viewGroup, false));
-            }
 
-            @Override
-            protected void onBindViewHolder(ShopListHolder viewHolder, int position, final Shop model) {
-                //TODO: Method to be added later: To show store details
-                final DatabaseReference shopRef = getRef(position);
-
-                // Set click listener for the shop view
-                final String shopKey = shopRef.getKey();
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Launch ShopDetailActivity
-                        Fragment fragment= new ShopDetailFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(ShopDetailFragment.SHOP_DETAIL_KEY, shopKey);
-                        fragment.setArguments(bundle);
-                        goFragment(fragment);
-                    }
-                });
-                viewHolder.bindToList(model,new View.OnClickListener(){
-                    @Override
-                    public void onClick(View chatView) {
-                        Toast.makeText(getActivity(),model.getShopname(),Toast.LENGTH_SHORT).show();
-                     }
-                });
-            }
         };
         //Set divider between items
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvShopList.getContext(),
@@ -155,7 +127,7 @@ public class ShopListingFragment extends Fragment {
     }
 
     //TODO: Method necessary to tweak query in later stage (i.e. make this abstract class)
-   // public abstract Query getQuery(DatabaseReference databaseReference);
+    // public abstract Query getQuery(DatabaseReference databaseReference);
 
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
@@ -168,8 +140,7 @@ public class ShopListingFragment extends Fragment {
 
         return recentStoreQuery;
     }
-
-    private void goFragment(Fragment fragment){
+    public void goFragment(Fragment fragment){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         //For replace: refers to the FrameLayout in "content_main"
@@ -177,4 +148,5 @@ public class ShopListingFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
 }
