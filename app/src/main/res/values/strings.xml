@@ -9,6 +9,7 @@
     <string name="r_address">Zipcode</string>
     <string name="r_phone">Phone Number</string>
     <string name="registerBtn">Sign up</string>
+    <string name="forgot">Forgot Password?</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

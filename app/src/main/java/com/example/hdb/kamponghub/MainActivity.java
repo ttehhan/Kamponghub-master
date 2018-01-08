@@ -1,17 +1,22 @@
 package com.example.hdb.kamponghub;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity; //make sures that it is backward compatible
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.text.TextUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.appevents.AppEventsLogger;
@@ -36,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
 
+    private TextView forgetPass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +51,14 @@ public class MainActivity extends AppCompatActivity {
         passwordText = (EditText) findViewById(R.id.password);
         registerBtn = (Button) findViewById(R.id.register);
         loginBtn = (Button) findViewById(R.id.login);
+        forgetPass = (TextView)findViewById(R.id.forgot_password);
         callbackManager = CallbackManager.Factory.create();
         LoginButton FBloginBtn = (LoginButton) findViewById(R.id.fb_login);
         FBloginBtn.setReadPermissions("email", "public_profile");
         getLoginDetails(FBloginBtn);
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance(); //gets the firebase auth object
+
 
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,15 +75,34 @@ public class MainActivity extends AppCompatActivity {
             }
     });
 
+        forgetPass.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                String emailAddress = "tester@test.com";
+
+                auth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(MainActivity.this,"Password recovery mail sent",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+        });
+
+
+
     }
 
     //method to login user using email and password
     protected void loginRequest() {
-       // final String email = emailText.getText().toString().trim();
-        //String password  = passwordText.getText().toString().trim();
+       final String email = emailText.getText().toString().trim();
+       String password  = passwordText.getText().toString().trim();
         //For Test
-        final String email = "lee@example.com";
-        String password ="password";
+        //final String email = "lee@example.com";
+        //String password ="password";
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter a valid email address",Toast.LENGTH_LONG).show();
             return;
@@ -185,6 +213,13 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
-                }}
+                }
+    //method to hide the keyboard after touch on listView
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+}
 
 
