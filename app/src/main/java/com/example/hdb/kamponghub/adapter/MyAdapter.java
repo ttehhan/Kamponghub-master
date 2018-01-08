@@ -1,5 +1,6 @@
 package com.example.hdb.kamponghub.adapter;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -17,12 +18,14 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.List;
+
 /**
  * Created by CSLee on 8/1/2018.
  */
 
 public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
-    Fragment fragment;
+   private Fragment fragment;
 
     public MyAdapter(@NonNull FirebaseRecyclerOptions<Shop> options) {
         super(options);
@@ -30,7 +33,7 @@ public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
     public MyAdapter(@NonNull FirebaseRecyclerOptions<Shop> options, Fragment fragment) {
         super(options);
         this.fragment=fragment;
-    }
+         }
     @Override
     public ShopListHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -62,4 +65,4 @@ public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
             }
         });
     }
-}
+  }

@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.hdb.kamponghub.NavigationActivity;
@@ -40,6 +41,7 @@ public class ShopListingFragment extends Fragment {
     private LinearLayoutManager layoutManager;
     private MyAdapter mFirebaseAdapter;
     private ProgressDialog dialog;
+    private SearchView mSearchView;
 
     //Firebase variables
     private DatabaseReference mDatabase;
@@ -62,6 +64,7 @@ public class ShopListingFragment extends Fragment {
         // [END create_database_reference]
 
         rvShopList = rootView.findViewById(R.id.shopListRecyclerView);
+        mSearchView = (SearchView) rootView.findViewById(R.id.menu_search);
         rvShopList.setHasFixedSize(true);
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
@@ -104,6 +107,7 @@ public class ShopListingFragment extends Fragment {
 
         //Set adapter
         rvShopList.setAdapter(mFirebaseAdapter);
+
     }
 
     @Override
@@ -140,13 +144,7 @@ public class ShopListingFragment extends Fragment {
 
         return recentStoreQuery;
     }
-    public void goFragment(Fragment fragment){
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        //For replace: refers to the FrameLayout in "content_main"
-        ft.replace(R.id.screen_area,fragment)
-                .addToBackStack(null)
-                .commit();
-    }
+
+
 
 }
