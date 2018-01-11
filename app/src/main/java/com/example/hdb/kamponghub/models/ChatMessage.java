@@ -1,4 +1,4 @@
-package com.example.hdb.kamponghub;
+package com.example.hdb.kamponghub.models;
 
 import java.util.Date;
 

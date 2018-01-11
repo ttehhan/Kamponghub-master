@@ -1,34 +1,27 @@
 package com.example.hdb.kamponghub;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Service;
 import android.content.Intent;
 import android.content.Context;
-import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.hdb.kamponghub.adapter.MessageAdapter;
+import com.example.hdb.kamponghub.models.ChatMessage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

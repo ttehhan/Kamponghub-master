@@ -1,4 +1,4 @@
-package com.example.hdb.kamponghub;
+package com.example.hdb.kamponghub.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.hdb.kamponghub.models.ChatMessage;
+import com.example.hdb.kamponghub.R;
+
 import java.util.List;
 /**
  * Created by TTH on 25/12/2017.
