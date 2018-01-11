@@ -152,8 +152,11 @@ public class NavigationActivity extends AppCompatActivity{
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
-                    fragment= new ChatFragment();
-                    goFragment(fragment,R.id.screen_area);
+                   // fragment= new ChatFragment();
+                    //goFragment(fragment,R.id.screen_area);
+                    Intent i = new Intent(NavigationActivity.this,Chat.class);
+                    i.putExtra("email", UserEmail);
+                    startActivity(i);
                     return true;
                 case R.id.navigation_bookmark:
                    // mTextMessage.setText(R.string.title_bookmark);

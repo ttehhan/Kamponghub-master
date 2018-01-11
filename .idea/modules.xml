@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Kamponghub-master.iml" filepath="$PROJECT_DIR$/Kamponghub-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Kamponghub.iml" filepath="$PROJECT_DIR$/Kamponghub.iml" />
+      <module fileurl="file://D:\APROJECTS\android\Kamponghub\Kamponghub-master.iml" filepath="D:\APROJECTS\android\Kamponghub\Kamponghub-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\APROJECTS\android\Kamponghub\app\app.iml" filepath="D:\APROJECTS\android\Kamponghub\app\app.iml" />
     </modules>
   </component>
 </project>
