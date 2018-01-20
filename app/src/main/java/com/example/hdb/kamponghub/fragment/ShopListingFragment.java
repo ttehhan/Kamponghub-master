@@ -33,6 +33,8 @@ import com.google.firebase.database.Query;
 //Uses in class FirebaseRecycleAdapter
 
 public class ShopListingFragment extends Fragment {
+
+
     //This constant is for easy referencing for Log purposes
     private static final String TAG = ShopListingFragment.class.getSimpleName();
 
@@ -125,8 +127,7 @@ public class ShopListingFragment extends Fragment {
             mFirebaseAdapter.stopListening();
         }
     }
-
-    public String getUid() {
+      public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
