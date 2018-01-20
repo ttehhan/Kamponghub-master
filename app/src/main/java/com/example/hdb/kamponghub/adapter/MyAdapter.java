@@ -42,7 +42,7 @@ public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
 
     @Override
     protected void onBindViewHolder(ShopListHolder viewHolder, int position, final Shop model) {
-        //TODO: Method to be added later: To show store details
+
         final DatabaseReference shopRef = getRef(position);
 
         // Set click listener for the shop view
