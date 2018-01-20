@@ -14,13 +14,17 @@ public class Shop {
     private String timeEnd;
     private String timeStart;
 
+
+    private Long phoneNumber;
+
     public Shop() {
         // Default constructor required for calls to DataSnapshot.getValue(Comment.class)
     }
 
     public Shop(String shopname, String shopImageUrl,
                 String address, String shopLatitude,
-                String shopLongitude, String timeEnd, String timeStart) {
+                String shopLongitude, String timeEnd, String timeStart,
+                Long phoneNumber) {
         this.shopName= shopname;
         this.shopImageUrl = shopImageUrl;
         this.shopAddress=address;
@@ -28,6 +32,7 @@ public class Shop {
         this.shopLongitude=shopLongitude;
         this.timeEnd=timeEnd;
         this.timeStart=timeStart;
+        this.phoneNumber = phoneNumber;
     }
 
 
@@ -86,6 +91,14 @@ public class Shop {
 
     public void setTimeStart(String timeStart) {
         this.timeStart = timeStart;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
 }

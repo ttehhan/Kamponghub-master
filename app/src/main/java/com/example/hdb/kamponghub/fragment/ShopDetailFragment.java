@@ -2,6 +2,8 @@ package com.example.hdb.kamponghub.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,13 +47,14 @@ public class ShopDetailFragment extends Fragment{
     private TextView shopAddress;
     private Fragment fragment;
     private ProgressDialog dialog;
+    private ImageButton imgBtnPhone;
 
     //Firebase variables
     private DatabaseReference mShopReference;
     private String mShopKey;
     private String shopLatitude;
     private  String shopLongtitude;
-
+   private String phone;
     //Model
     Shop shop;
 
@@ -87,7 +91,18 @@ public class ShopDetailFragment extends Fragment{
         isShopOpen = rootView.findViewById(R.id.isShopOpen);
         shopTime = rootView.findViewById(R.id.shopTime);
         shopAddress=rootView.findViewById(R.id.shopAddress);
+        imgBtnPhone=rootView.findViewById(R.id.imgBtnPhone);
 
+        //Go phone on imgBtnPhone click
+        imgBtnPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Launch dialer
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel: +65"+phone));
+                startActivity(callIntent);
+            }
+        });
         //Get data
         // Attach a listener to read the data at shops reference
         mShopReference.addValueEventListener(new ValueEventListener() {
@@ -104,6 +119,8 @@ public class ShopDetailFragment extends Fragment{
                 }
                 shopLatitude = shop.getShopLatitude();
                 shopLongtitude = shop.getShopLongitude();
+                //Get phone number from database
+                phone = shop.getPhoneNumber().toString();
 
                 fragment = new MapsFragment();
 

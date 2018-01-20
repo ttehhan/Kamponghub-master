@@ -98,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
     //method to login user using email and password
     protected void loginRequest() {
-       final String email = emailText.getText().toString().trim();
-       String password  = passwordText.getText().toString().trim();
+       /*final String email = emailText.getText().toString().trim();
+       String password  = passwordText.getText().toString().trim();*/
         //For Test
-        //final String email = "lee@example.com";
-        //String password ="password";
+        final String email = "lee@example.com";
+        String password ="password";
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter a valid email address",Toast.LENGTH_LONG).show();
             return;
