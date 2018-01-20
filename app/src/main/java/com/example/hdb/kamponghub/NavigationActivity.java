@@ -38,6 +38,8 @@ public class NavigationActivity extends AppCompatActivity{
    // private ImageButton chatBtn;
    private String UserEmail;
    private Fragment fragment;
+    //Firebase variable
+    private FirebaseAuth mAuth=FirebaseAuth.getInstance(); // <== To prevent null error in getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +178,11 @@ public class NavigationActivity extends AppCompatActivity{
         ft.replace(toReplace,fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    //Get Firebase Uid
+    public String getUid() {
+        return mAuth.getCurrentUser().getUid();
     }
 
 }

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
 import com.example.hdb.kamponghub.models.Shop;
 import com.example.hdb.kamponghub.utilities.Calculations;
@@ -31,6 +32,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ShopDetailFragment extends Fragment{
@@ -48,9 +52,12 @@ public class ShopDetailFragment extends Fragment{
     private Fragment fragment;
     private ProgressDialog dialog;
     private ImageButton imgBtnPhone;
+    private ImageButton imgBtnBookmark;
 
     //Firebase variables
     private DatabaseReference mShopReference;
+    private DatabaseReference mLikeReference;
+
     private String mShopKey;
     private String shopLatitude;
     private  String shopLongtitude;
@@ -80,10 +87,12 @@ public class ShopDetailFragment extends Fragment{
                 throw new IllegalArgumentException("Must pass SHOP_DETAIL_KEY");
             }
         }
-
+        final String userId = ((NavigationActivity)getActivity()).getUid();
         // Initialize Database
         mShopReference = FirebaseDatabase.getInstance().getReference()
                 .child("shops").child(mShopKey);
+        mLikeReference = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(userId).child("shopsLiked");
 
         // Initialize Views
         shopImage = rootView.findViewById(R.id.shopImage);
@@ -92,7 +101,7 @@ public class ShopDetailFragment extends Fragment{
         shopTime = rootView.findViewById(R.id.shopTime);
         shopAddress=rootView.findViewById(R.id.shopAddress);
         imgBtnPhone=rootView.findViewById(R.id.imgBtnPhone);
-
+        imgBtnBookmark=rootView.findViewById(R.id.imgBtnBookmark);
         //Go phone on imgBtnPhone click
         imgBtnPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,12 +112,31 @@ public class ShopDetailFragment extends Fragment{
                 startActivity(callIntent);
             }
         });
+        //Like or unlike shop
+        imgBtnBookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Update firebase by toggling status
+                if (((String) imgBtnBookmark.getTag())=="isLiked"){
+                    //Need to unlike
+                     mLikeReference.child(mShopKey).removeValue();
+                }else{
+                    //Need to like
+                    if (shop!=null) {
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(mShopKey, shop);
+                        mLikeReference.updateChildren(childUpdates);
+                    }
+                }
+
+            }
+        });
         //Get data
         // Attach a listener to read the data at shops reference
         mShopReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Shop shop = dataSnapshot.getValue(Shop.class);
+                 shop = dataSnapshot.getValue(Shop.class);
                 setImage(shop.getShopImageUrl());
                 shopName.setText(shop.getShopName());
                 isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));
@@ -142,6 +170,27 @@ public class ShopDetailFragment extends Fragment{
                 Toast.makeText(getContext(), "Failed to load shop details.",
                         Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
+            }
+        });
+
+        //Attach listener to check if user like shop
+        mLikeReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Determine if user liked shop
+                if (dataSnapshot.hasChild(mShopKey)) {
+                   imgBtnBookmark.setImageResource(R.drawable.ic_bookmark_black_24dp);
+                    imgBtnBookmark.setTag("isLiked");
+
+                }else{
+                    imgBtnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+                    imgBtnBookmark.setTag("notLiked");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
         return rootView;
