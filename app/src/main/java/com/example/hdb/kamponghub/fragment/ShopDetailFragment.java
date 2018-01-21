@@ -2,7 +2,10 @@ package com.example.hdb.kamponghub.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,12 +35,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Geocoder;
+import java.util.Locale;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class ShopDetailFragment extends Fragment{
+public class ShopDetailFragment extends Fragment implements LocationListener {
     //Constants are for easy referencing for Log purposes
     private static final String TAG = ShopDetailFragment.class.getSimpleName();
     public static final String SHOP_DETAIL_KEY = "shop_detail_key";
@@ -53,17 +65,22 @@ public class ShopDetailFragment extends Fragment{
     private ProgressDialog dialog;
     private ImageButton imgBtnPhone;
     private ImageButton imgBtnBookmark;
+    private ImageButton imgBtnRoute;
 
     //Firebase variables
     private DatabaseReference mShopReference;
     private DatabaseReference mLikeReference;
 
     private String mShopKey;
-    private String shopLatitude;
-    private  String shopLongtitude;
-   private String phone;
+    private String shopLatitude, shopLongtitude;
+    private String myLatitude, myLongtitude;
+    private String phone;
+
     //Model
     Shop shop;
+    LocationManager locationManager;
+    Location loc;
+
 
     //Empty constructor
     public ShopDetailFragment() {}
@@ -78,6 +95,7 @@ public class ShopDetailFragment extends Fragment{
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
+
 
         // Get shop key from intent
         Bundle bundle = this.getArguments();
@@ -102,6 +120,8 @@ public class ShopDetailFragment extends Fragment{
         shopAddress=rootView.findViewById(R.id.shopAddress);
         imgBtnPhone=rootView.findViewById(R.id.imgBtnPhone);
         imgBtnBookmark=rootView.findViewById(R.id.imgBtnBookmark);
+        imgBtnRoute =  rootView.findViewById(R.id.imgBtnRoute);
+
         //Go phone on imgBtnPhone click
         imgBtnPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +132,8 @@ public class ShopDetailFragment extends Fragment{
                 startActivity(callIntent);
             }
         });
-        //Like or unlike shop
+
+        //adds shop to bookmark list
         imgBtnBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +152,37 @@ public class ShopDetailFragment extends Fragment{
 
             }
         });
+
+        //launches google map origin your location to shop destination
+        imgBtnRoute.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(getContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getContext(),
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+                }
+                getLocation();
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("https")
+                        .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
+                        .appendQueryParameter("origin",myLatitude+","+myLongtitude)
+                        .appendQueryParameter("destination",shopLatitude+ "," +shopLongtitude)
+                        .appendQueryParameter("travelmode","transit");
+                String url = builder.build().toString();
+                Log.d("d",url);
+                Intent ii = new Intent(Intent.ACTION_VIEW);
+                ii.setData(Uri.parse(url));
+                startActivity(ii);
+
+            }
+        });
+
         //Get data
         // Attach a listener to read the data at shops reference
         mShopReference.addValueEventListener(new ValueEventListener() {
@@ -196,6 +248,28 @@ public class ShopDetailFragment extends Fragment{
         return rootView;
     }
 
+    public void getLocation() {
+        try{
+        locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+        if (locationManager != null) {
+            loc = locationManager.getLastKnownLocation(bestProvider);
+        }
+        locationManager.requestLocationUpdates(bestProvider, 5000, 0, this);
+        if (loc != null) {
+            myLatitude = String.valueOf(loc.getLatitude());
+            myLongtitude = String.valueOf(loc.getLongitude());
+        }
+    } catch (SecurityException e) {
+
+    }
+
+    }
+
+
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -252,4 +326,24 @@ public class ShopDetailFragment extends Fragment{
         transaction.replace(toReplace, fragment).commit();
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        myLatitude = String.valueOf(location.getLatitude());
+        myLongtitude = String.valueOf(location.getLongitude());
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(this.getActivity(), "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
 }
