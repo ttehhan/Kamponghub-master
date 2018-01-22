@@ -36,7 +36,6 @@ public class NavigationActivity extends AppCompatActivity{
 
     //private TextView mTextMessage;
    // private ImageButton chatBtn;
-   private String UserEmail;
    private Fragment fragment;
     //Firebase variable
     private FirebaseAuth mAuth=FirebaseAuth.getInstance(); // <== To prevent null error in getUid();
@@ -47,12 +46,6 @@ public class NavigationActivity extends AppCompatActivity{
         setContentView(R.layout.activity_home_page);
         //chatBtn = (ImageButton)(findViewById(R.id.chatButton));
        // mTextMessage = (TextView)findViewById(R.id.message);
-
-        Bundle extras = getIntent().getExtras();
-        if(extras == null)
-        {UserEmail = null;}
-        else
-        {UserEmail = extras.getString("email");}
 
        /* chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +150,6 @@ public class NavigationActivity extends AppCompatActivity{
                    // fragment= new ChatFragment();
                     //goFragment(fragment,R.id.screen_area);
                     Intent i = new Intent(NavigationActivity.this,Chat.class);
-                    i.putExtra("email", UserEmail);
                     startActivity(i);
                     return true;
                 case R.id.navigation_bookmark:

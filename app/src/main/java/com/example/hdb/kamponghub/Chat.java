@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.EditText;
@@ -22,12 +23,15 @@ import java.util.List;
 
 import com.example.hdb.kamponghub.adapter.MessageAdapter;
 import com.example.hdb.kamponghub.models.ChatMessage;
+import com.example.hdb.kamponghub.models.MyApplication;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import com.example.hdb.kamponghub.models.MyApplication;
 
 public class Chat extends AppCompatActivity {
     private Button sendMessage;
@@ -38,17 +42,17 @@ public class Chat extends AppCompatActivity {
     private ArrayAdapter<ChatMessage> adapter;
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB;
-    private String UserEmail;
+    private MyApplication myApp;
     //private FirebaseListAdapter<ChatMessage> adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Bundle extras = getIntent().getExtras();
-        UserEmail = extras.getString("email");
+        myApp = (MyApplication) getApplicationContext();
         rootDB = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
         chatDB = rootDB.child("chatHistory");
-        Query queryRef = chatDB.orderByChild("email").equalTo(UserEmail); //query from firebase to retrieve only chatMessages of logged in user
+        Log.d("WTF", myApp.getEmail());
+        Query queryRef = chatDB.orderByChild("email").equalTo(myApp.getEmail()); //query from firebase to retrieve only chatMessages of logged in user
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
         LinearLayoutManager verticalScroll = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         actionBar = getSupportActionBar();
@@ -68,7 +72,7 @@ public class Chat extends AppCompatActivity {
                     //Log.d("natalia:", chatDetails.toString());
                     ChatMessage chatMsg = chatDataSnapshot.getValue(ChatMessage.class);
                     //Log.d("natalia", chatMsg.getMsg());
-                    chatMsg.setMsgType(myMsg); //harcoded to set to my message as of now
+                    chatMsg.setMsgType(myMsg); //hardcoded to set to my message as of now
                     chatMsgHistory.add(chatMsg);
 
                     //if ( chatMsg.getEmail() == UserEmail) {
@@ -91,7 +95,7 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //List<ChatMessage> chatMessages = new ArrayList<>();
-                ChatMessage chatMessage = new ChatMessage(input.getText().toString(), UserEmail, getCurrentTime(), myMsg);
+                ChatMessage chatMessage = new ChatMessage(input.getText().toString(), myApp.getEmail(), getCurrentTime(), myMsg);
                 chatMsgHistory.add(chatMessage);
                 adapter.notifyDataSetChanged();
                 chatDB.push().setValue(chatMessage);
@@ -113,7 +117,7 @@ public class Chat extends AppCompatActivity {
     }
     //method to create a navigation back button back to the MainActivity
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), HomePage.class);
+        Intent myIntent = new Intent(getApplicationContext(), NavigationActivity.class);
         startActivityForResult(myIntent, 0);
         return true;
     }

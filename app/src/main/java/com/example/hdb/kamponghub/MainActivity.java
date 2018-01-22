@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.hdb.kamponghub.models.MyApplication;
 import com.facebook.AccessToken;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
@@ -33,13 +35,17 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FacebookAuthProvider;
 
+import com.example.hdb.kamponghub.models.MyApplication;
+
 
 public class MainActivity extends AppCompatActivity {
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
     private EditText emailText, passwordText;
     private Button loginBtn, registerBtn;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private String email, password;
+    private MyApplication myApp;
 
     private TextView forgetPass;
 
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myApp = (MyApplication) getApplicationContext();
         emailText = (EditText) findViewById(R.id.email);
         passwordText = (EditText) findViewById(R.id.password);
         registerBtn = (Button) findViewById(R.id.register);
@@ -98,20 +105,24 @@ public class MainActivity extends AppCompatActivity {
 
     //method to login user using email and password
     protected void loginRequest() {
-       /*final String email = emailText.getText().toString().trim();
-       String password  = passwordText.getText().toString().trim();*/
-        //For Test
-        final String email = "lee@example.com";
-        String password ="password";
-        if(TextUtils.isEmpty(email)){
+       email = emailText.getText().toString().trim();
+       password  = passwordText.getText().toString().trim();
+
+       //For Test
+        if(TextUtils.isEmpty(email) && (TextUtils.isEmpty(password)))
+        {
+            email = "lee@example.com";
+            password ="password";
+        }
+        myApp.setEmail(email);
+        /*if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter a valid email address",Toast.LENGTH_LONG).show();
             return;
         }
-
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this,"Password cannot be empty!",Toast.LENGTH_LONG).show();
             return;
-        }
+        }*/
         progressDialog.setMessage("Hold on...");
         progressDialog.show();
 
@@ -125,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
                             //start the profile activity
                             finish();
                             Intent i = new Intent(MainActivity.this, NavigationActivity.class);
-                            i.putExtra("email", email);
                             startActivity(i);
                         } else {
                             //display some message here
