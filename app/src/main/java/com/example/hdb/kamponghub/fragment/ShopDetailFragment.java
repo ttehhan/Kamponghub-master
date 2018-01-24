@@ -153,7 +153,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             }
         });
 
-        //launches google map origin your location to shop destination
+        //launches google map with origin set to your location to shop destination
         imgBtnRoute.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -248,6 +248,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         return rootView;
     }
 
+    //method to get users location via lat and long
     public void getLocation() {
         try{
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);

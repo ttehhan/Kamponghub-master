@@ -139,14 +139,14 @@ public class NavigationActivity extends AppCompatActivity{
 
                 case R.id.navigation_store:
                     //mTextMessage.setText(R.string.title_chat);
-                    Toast.makeText(NavigationActivity.this, "Store", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(NavigationActivity.this, "Store", Toast.LENGTH_SHORT).show();
                     fragment= new ShopListingFragment();
                     goFragment(fragment,R.id.screen_area);
                     return true;
 
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
-                    Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
                    // fragment= new ChatFragment();
                     //goFragment(fragment,R.id.screen_area);
                     Intent i = new Intent(NavigationActivity.this,Chat.class);
@@ -154,7 +154,7 @@ public class NavigationActivity extends AppCompatActivity{
                     return true;
                 case R.id.navigation_bookmark:
                    // mTextMessage.setText(R.string.title_bookmark);
-                    Toast.makeText(NavigationActivity.this, "Bookmark", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(NavigationActivity.this, "Bookmark", Toast.LENGTH_SHORT).show();
                    fragment = new BookMarkFragment();
                     goFragment(fragment,R.id.screen_area);
                     return true;

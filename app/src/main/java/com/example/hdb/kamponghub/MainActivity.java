@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Password cannot be empty!",Toast.LENGTH_LONG).show();
             return;
         }*/
-        progressDialog.setMessage("Hold on...");
+        progressDialog.setMessage("Loading...");
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(i);
                         } else {
                             //display some message here
-                            Toast.makeText(MainActivity.this, "Registration Error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Wrong email or password used", Toast.LENGTH_LONG).show();
                         }
                         progressDialog.dismiss();
                     }

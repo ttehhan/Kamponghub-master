@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.Button;
+import android.app.ProgressDialog;
 
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,8 @@ public class Chat extends AppCompatActivity {
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB;
     private MyApplication myApp;
+    private ProgressDialog progressDialog;
+    private boolean sentDoNotRefresh = false;
     //private FirebaseListAdapter<ChatMessage> adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,6 @@ public class Chat extends AppCompatActivity {
         myApp = (MyApplication) getApplicationContext();
         rootDB = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
         chatDB = rootDB.child("chatHistory");
-        Log.d("WTF", myApp.getEmail());
         Query queryRef = chatDB.orderByChild("email").equalTo(myApp.getEmail()); //query from firebase to retrieve only chatMessages of logged in user
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
         LinearLayoutManager verticalScroll = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -63,10 +67,14 @@ public class Chat extends AppCompatActivity {
 
         adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
         listView.setAdapter(adapter);
+        progressDialog = new ProgressDialog(this);
 
         queryRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(sentDoNotRefresh != true)
                 for (DataSnapshot chatDataSnapshot : dataSnapshot.getChildren()) {
                     //Object chatDetails = chatDataSnapshot.getValue();
                     //Log.d("natalia:", chatDetails.toString());
@@ -101,6 +109,7 @@ public class Chat extends AppCompatActivity {
                 chatDB.push().setValue(chatMessage);
 
                 input.setText("");
+                sentDoNotRefresh = true; //need to set this to prevent onDataChange from populating data once send message is clicked
             }
         });
 
@@ -117,6 +126,8 @@ public class Chat extends AppCompatActivity {
     }
     //method to create a navigation back button back to the MainActivity
     public boolean onOptionsItemSelected(MenuItem item){
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         Intent myIntent = new Intent(getApplicationContext(), NavigationActivity.class);
         startActivityForResult(myIntent, 0);
         return true;
