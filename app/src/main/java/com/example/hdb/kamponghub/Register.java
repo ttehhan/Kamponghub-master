@@ -93,12 +93,12 @@ public class Register extends AppCompatActivity {
         if (phoneText.isEmpty()) { //phone no. is optional
             int addNo = Integer.parseInt(zipcode.getText().toString().trim());
             userDetails = new User(emailText, userNameText, addNo);
-            userDB.push().setValue(userDetails); //pushes the data into firebase user table
+            //userDB.push().setValue(userDetails); //pushes the data into firebase user table
         }else {
             int phoneNo = Integer.parseInt(phone.getText().toString().trim()); //phone no. optional
             int addNo = Integer.parseInt(zipcode.getText().toString().trim());
             userDetails = new User(emailText, userNameText, addNo, phoneNo);
-            userDB.push().setValue(userDetails); //pushes the data into firebase user table
+            //userDB.push().setValue(userDetails); //pushes the data into firebase user table
         }
 
 
@@ -112,6 +112,8 @@ public class Register extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if(task.isSuccessful()){
+                            String uid = firebaseAuth.getCurrentUser().getUid();
+                            userDB.child(uid).setValue(userDetails);
                             Toast.makeText(Register.this,"Successfully registered",Toast.LENGTH_LONG).show();
                             Intent i = new Intent(Register.this, MainActivity.class);
                             startActivity(i);
