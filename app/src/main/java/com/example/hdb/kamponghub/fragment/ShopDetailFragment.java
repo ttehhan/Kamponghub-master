@@ -189,7 +189,8 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                  shop = dataSnapshot.getValue(Shop.class);
-                setImage(shop.getShopImageUrl());
+                shopImage.setImageBitmap(Calculations.base64ToBitmap(shop.getShopImage()));
+                /*setImage(shop.getShopImageUrl());*/
                 shopName.setText(shop.getShopName());
                 isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));
                 shopTime.setText(Calculations.calcTime(shop.getTimeStart(),shop.getTimeEnd()));
@@ -315,12 +316,12 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     }
 
 
-    public void setImage(String imageUrl)
+ /*   public void setImage(String imageUrl)
     {
         Picasso.with(this.getContext())
                 .load(imageUrl)
                 .into(shopImage);
-    }
+    }*/
 
     public void goChildFragment(Fragment fragment, int toReplace){
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
