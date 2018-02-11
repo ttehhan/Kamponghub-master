@@ -13,10 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,9 +65,9 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private TextView shopAddress;
     private Fragment fragment;
     private ProgressDialog dialog;
-    private ImageButton imgBtnPhone;
-    private ImageButton imgBtnBookmark;
-    private ImageButton imgBtnRoute;
+    private Button btnPhone;
+    private Button btnBookmark;
+    private Button btnRoute;
 
     //Firebase variables
     private DatabaseReference mShopReference;
@@ -90,7 +92,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_shop_detail, container, false);
-
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Shop Detail");
         //Set progress dialog
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
@@ -118,12 +120,12 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         isShopOpen = rootView.findViewById(R.id.isShopOpen);
         shopTime = rootView.findViewById(R.id.shopTime);
         shopAddress=rootView.findViewById(R.id.shopAddress);
-        imgBtnPhone=rootView.findViewById(R.id.imgBtnPhone);
-        imgBtnBookmark=rootView.findViewById(R.id.imgBtnBookmark);
-        imgBtnRoute =  rootView.findViewById(R.id.imgBtnRoute);
+        btnPhone=rootView.findViewById(R.id.btnPhone);
+        btnBookmark=rootView.findViewById(R.id.btnBookmark);
+        btnRoute =  rootView.findViewById(R.id.btnRoute);
 
         //Go phone on imgBtnPhone click
-        imgBtnPhone.setOnClickListener(new View.OnClickListener() {
+        btnPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Launch dialer
@@ -134,11 +136,11 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         });
 
         //adds shop to bookmark list
-        imgBtnBookmark.setOnClickListener(new View.OnClickListener() {
+        btnBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Update firebase by toggling status
-                if (((String) imgBtnBookmark.getTag())=="isLiked"){
+                if (((String) btnBookmark.getTag())=="isLiked"){
                     //Need to unlike
                      mLikeReference.child(mShopKey).removeValue();
                 }else{
@@ -154,7 +156,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         });
 
         //launches google map with origin set to your location to shop destination
-        imgBtnRoute.setOnClickListener(new View.OnClickListener() {
+        btnRoute.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -203,16 +205,14 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 //Get phone number from database
                 phone = shop.getPhoneNumber().toString();
 
-                fragment = new MapsFragment();
-
+               /* fragment = new MapsFragment();
                 if (shopLatitude!=null && shopLongtitude!=null){
                     Bundle bundle = new Bundle();
                     bundle.putString(MapsFragment.SHOP_LATITUDE_KEY, shopLatitude);
                     bundle.putString(MapsFragment.SHOP_LONGTITUDE_KEY,shopLongtitude);
                     fragment.setArguments(bundle);
                 }
-
-                goChildFragment(fragment,R.id.childFragmentContainer);
+                goChildFragment(fragment,R.id.childFragmentContainer);*/
             }
 
             @Override
@@ -232,12 +232,12 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Determine if user liked shop
                 if (dataSnapshot.hasChild(mShopKey)) {
-                   imgBtnBookmark.setImageResource(R.drawable.ic_bookmark_black_24dp);
-                    imgBtnBookmark.setTag("isLiked");
+                   btnBookmark.setBackgroundResource(R.drawable.ic_bookmark_black_24dp);
+                    btnBookmark.setTag("isLiked");
 
                 }else{
-                    imgBtnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
-                    imgBtnBookmark.setTag("notLiked");
+                    btnBookmark.setBackgroundResource(R.drawable.ic_bookmark_border_black_24dp);
+                    btnBookmark.setTag("notLiked");
                 }
             }
 
@@ -255,18 +255,15 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String bestProvider = locationManager.getBestProvider(criteria, true);
-        if (locationManager != null) {
+         if (locationManager != null) {
             loc = locationManager.getLastKnownLocation(bestProvider);
-        }
+            }
         locationManager.requestLocationUpdates(bestProvider, 5000, 0, this);
-        if (loc != null) {
+            if (loc != null) {
             myLatitude = String.valueOf(loc.getLatitude());
             myLongtitude = String.valueOf(loc.getLongitude());
-        }
-    } catch (SecurityException e) {
-
-    }
-
+            }
+        } catch (SecurityException e) {    }
     }
 
 
@@ -304,6 +301,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     // public abstract Query getQuery(DatabaseReference databaseReference);
 
     //Method can be placed in inherited class later on
+/*
     public Query getQuery(DatabaseReference databaseReference) {
         // [START recent_store_query]
         // Last 100 posts, these are automatically the 100 most recent
@@ -314,6 +312,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
 
         return recentStoreQuery;
     }
+*/
 
 
  /*   public void setImage(String imageUrl)
@@ -323,10 +322,10 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 .into(shopImage);
     }*/
 
-    public void goChildFragment(Fragment fragment, int toReplace){
+/*    public void goChildFragment(Fragment fragment, int toReplace){
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(toReplace, fragment).commit();
-    }
+    }*/
 
     @Override
     public void onLocationChanged(Location location) {

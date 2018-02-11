@@ -14,15 +14,12 @@
             android:layout_width="250dp"
             android:layout_height="150dp"
             android:layout_margin="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:scaleType="fitCenter"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/shopAddress" />
 
         <TextView
             android:id="@+id/shopName"
@@ -38,107 +35,108 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/isShopOpen"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:maxLines="1"
             android:text="isShopOpen"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopName" />
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
         <TextView
             android:id="@+id/shopTime"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
             android:maxLines="1"
             android:text="shopTime"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/isShopOpen" />
 
         <TextView
             android:id="@+id/shopAddress"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:lines="5"
             android:maxLines="1"
+            android:minLines="5"
             android:text="shopAddress"
             android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopTime" />
+            app:layout_constraintTop_toBottomOf="@+id/shopName" />
+
+        <Button
+            android:id="@+id/btnRoute"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_directions_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnBookmark"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+
+        <Button
+            android:id="@+id/btnBookmark"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_bookmark_border_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+
+        <Button
+            android:id="@+id/btnPhone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_settings_phone_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnBookmark" />
+
+        <Button
+            android:id="@+id/btnChat"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_chat_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnPhone"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/btnRoute" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="211dp" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="192dp" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="330dp" />
-
-        <ImageButton
-            android:id="@+id/imgBtnBookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_bookmark"
-            app:layout_constraintEnd_toStartOf="@+id/imgBtnPhone"
-            app:layout_constraintTop_toTopOf="@+id/shopName" />
-
-        <ImageButton
-            android:id="@+id/imgBtnPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_phone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
-
-        <ImageButton
-            android:id="@+id/imgBtnChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_chat"
-            app:layout_constraintEnd_toStartOf="@+id/imgBtnRoute"
-            app:layout_constraintTop_toBottomOf="@+id/imgBtnBookmark" />
-
-        <ImageButton
-            android:id="@+id/imgBtnRoute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_route"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgBtnPhone" />
         //Google Maps
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <!--        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/childFragmentContainer"
             android:layout_width="match_parent"
@@ -152,7 +150,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline2"
             tools:context="com.example.hdb.kamponghub.fragment.MapsFragment">
-        </FrameLayout>
+        </FrameLayout>-->
 
     </android.support.constraint.ConstraintLayout>
 

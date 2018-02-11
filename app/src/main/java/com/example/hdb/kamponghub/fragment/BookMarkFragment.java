@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +49,7 @@ public class BookMarkFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_shop_listing, container, false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("My Bookmarks");
         // [START create_database_reference]
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END create_database_reference]
@@ -57,6 +59,7 @@ public class BookMarkFragment extends Fragment {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
+
         return rootView;
     }
 
