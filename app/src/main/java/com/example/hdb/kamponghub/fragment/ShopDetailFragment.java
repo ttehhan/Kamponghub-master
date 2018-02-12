@@ -1,6 +1,7 @@
 package com.example.hdb.kamponghub.fragment;
 
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hdb.kamponghub.Chat;
 import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
 import com.example.hdb.kamponghub.models.Shop;
@@ -48,6 +50,10 @@ import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.example.hdb.kamponghub.models.MyApplication;
+
 
 public class ShopDetailFragment extends Fragment implements LocationListener {
     //Constants are for easy referencing for Log purposes
@@ -66,6 +72,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private ImageButton imgBtnPhone;
     private ImageButton imgBtnBookmark;
     private ImageButton imgBtnRoute;
+    private ImageButton imgBtnChat;
 
     //Firebase variables
     private DatabaseReference mShopReference;
@@ -80,6 +87,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     Shop shop;
     LocationManager locationManager;
     Location loc;
+    MyApplication myApp;
 
 
     //Empty constructor
@@ -90,6 +98,9 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_shop_detail, container, false);
+
+        //init the shared variable object
+        myApp = (MyApplication) getActivity().getApplicationContext();
 
         //Set progress dialog
         dialog = new ProgressDialog(getActivity());
@@ -121,6 +132,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         imgBtnPhone=rootView.findViewById(R.id.imgBtnPhone);
         imgBtnBookmark=rootView.findViewById(R.id.imgBtnBookmark);
         imgBtnRoute =  rootView.findViewById(R.id.imgBtnRoute);
+        imgBtnChat = rootView.findViewById(R.id.imgBtnChat);
 
         //Go phone on imgBtnPhone click
         imgBtnPhone.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +191,28 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 Intent ii = new Intent(Intent.ACTION_VIEW);
                 ii.setData(Uri.parse(url));
                 startActivity(ii);
+
+            }
+        });
+
+        imgBtnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference chatDB = FirebaseDatabase.getInstance().getReference().child("chatHistory");
+                final String username = myApp.getUserName();
+                //method to query the chatHistory to see if it contains logged in user userID as key, if not create one
+                chatDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(username) == false )
+                        { chatDB.child(username).setValue(shop.getShopName()); }
+                        myApp.setShopName(shop.getShopName());
+                        Intent i = new Intent(getActivity(), Chat.class);
+                        startActivity(i);
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
 
             }
         });

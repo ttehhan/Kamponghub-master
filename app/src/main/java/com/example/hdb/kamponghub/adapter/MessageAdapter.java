@@ -35,11 +35,11 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         ChatMessage chatMessage = getItem(position);
         int viewType = getItemViewType(position);
 
-        if (chatMessage.msgIdentify()) { //if true, will put as my messsages
+        if (chatMessage.getMsgType() == true) { //if true, will put as my messsages
             layoutResource = R.layout.message_sent;
-        } else {
+        }
+        else {
             layoutResource = R.layout.received_message;
-
         }
 
         if (convertView != null) {
@@ -53,6 +53,7 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         //set message content
         holder.msg.setText(chatMessage.getMsg());
         holder.time.setText(chatMessage.getTime());
+        //holder.name.setText();
 
         return convertView;
     }
@@ -73,10 +74,12 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     private class ViewHolder {
         private TextView msg;
         private TextView time;
+        private TextView name;
 
         public ViewHolder(View v) {
             msg = (TextView) v.findViewById(R.id.text_message_body);
             time = (TextView) v.findViewById(R.id.text_message_time);
+            name = (TextView) v.findViewById(R.id.text_message_name);
         }
     }
 

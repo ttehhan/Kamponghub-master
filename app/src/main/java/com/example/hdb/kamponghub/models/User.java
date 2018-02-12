@@ -1,10 +1,13 @@
 package com.example.hdb.kamponghub.models;
 
+import android.app.Application;
+
 /**
  * Created by TTH on 5/1/2018.
  */
 
 public class User {
+    private String FireUID;
     private String email;
     private String username;
     private int address;
@@ -28,6 +31,8 @@ public class User {
         this.phone = phone;
     }
 
+    //public String getFireUID() { return FireUID; }
+   //public void setFireUID(String uid) { this.FireUID = uid; }
     public String getEmail() {
         return email;
     }
@@ -46,9 +51,7 @@ public class User {
     public void setAddress(int address) {
         this.address = address;
     }
-    public int getPhone() {
-        return phone;
-    }
+    public int getPhone() {return phone;}
     public void setPhone(int phone) {this.phone = phone;}
 
 }

@@ -36,6 +36,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FacebookAuthProvider;
 
 import com.example.hdb.kamponghub.models.MyApplication;
+import com.example.hdb.kamponghub.models.User;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String email, password;
     private MyApplication myApp;
+    private DatabaseReference userDB;
 
     private TextView forgetPass;
 
@@ -65,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         getLoginDetails(FBloginBtn);
         progressDialog = new ProgressDialog(this);
         firebaseAuth = FirebaseAuth.getInstance(); //gets the firebase auth object
+        userDB = FirebaseDatabase.getInstance().getReference().child("users");
 
 
 
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         forgetPass.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
-                String emailAddress = "tester@test.com";
+                String emailAddress = "tester0@test.com";
 
                 auth.sendPasswordResetEmail(emailAddress)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -115,6 +123,21 @@ public class MainActivity extends AppCompatActivity {
             password ="password";
         }
         myApp.setEmail(email);
+        userDB.orderByChild("email").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User userData = dataSnapshot.getValue(User.class);
+                myApp.setUserName(userData.getUsername());
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
         /*if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter a valid email address",Toast.LENGTH_LONG).show();
             return;

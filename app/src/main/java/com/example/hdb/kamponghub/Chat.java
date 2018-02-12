@@ -23,10 +23,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Object;
 
 import com.example.hdb.kamponghub.adapter.MessageAdapter;
 import com.example.hdb.kamponghub.models.ChatMessage;
 import com.example.hdb.kamponghub.models.MyApplication;
+import com.example.hdb.kamponghub.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,18 +48,22 @@ public class Chat extends AppCompatActivity {
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB;
     private MyApplication myApp;
+    private String username;
     private ProgressDialog progressDialog;
     private boolean sentDoNotRefresh = false;
     //private FirebaseListAdapter<ChatMessage> adapter;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        myApp = (MyApplication) getApplicationContext();
+        myApp = (MyApplication) getApplicationContext(); //this is for sharing a variable across various fragment and activity
+        username = myApp.getUserName();
         rootDB = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
-        chatDB = rootDB.child("chatHistory");
-        Query queryRef = chatDB.orderByChild("email").equalTo(myApp.getEmail()); //query from firebase to retrieve only chatMessages of logged in user
+        Log.d("username", username);
+        chatDB = rootDB.child("chatHistory").child(username);
+        Log.d("shopname", myApp.getShopName());
+        Query queryRef = chatDB.child(myApp.getShopName()).orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
+
         LinearLayoutManager verticalScroll = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity
@@ -70,27 +76,15 @@ public class Chat extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
         queryRef.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(sentDoNotRefresh != true)
-                for (DataSnapshot chatDataSnapshot : dataSnapshot.getChildren()) {
-                    //Object chatDetails = chatDataSnapshot.getValue();
-                    //Log.d("natalia:", chatDetails.toString());
-                    ChatMessage chatMsg = chatDataSnapshot.getValue(ChatMessage.class);
-                    //Log.d("natalia", chatMsg.getMsg());
-                    chatMsg.setMsgType(myMsg); //hardcoded to set to my message as of now
-                    chatMsgHistory.add(chatMsg);
-
-                    //if ( chatMsg.getEmail() == UserEmail) {
-                      //  chatMsg.setMsgType(true);
-                    //} else {
-                      //  chatMsg.setMsgType(false);
-                    //}
-                    adapter.notifyDataSetChanged();
+                if(!sentDoNotRefresh) {
+                    for (DataSnapshot chatDataSnapshot : dataSnapshot.getChildren()) {
+                        ChatMessage chatMsg = chatDataSnapshot.getValue(ChatMessage.class);
+                        chatMsgHistory.add(chatMsg);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
-
             }
 
             @Override
@@ -102,14 +96,17 @@ public class Chat extends AppCompatActivity {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //List<ChatMessage> chatMessages = new ArrayList<>();
-                ChatMessage chatMessage = new ChatMessage(input.getText().toString(), myApp.getEmail(), getCurrentTime(), myMsg);
+                ChatMessage chatMessage = new ChatMessage(input.getText().toString(), myApp.getEmail(), getCurrentTime(), true);
+                chatMessage.setMsgType(true);
                 chatMsgHistory.add(chatMessage);
+
                 adapter.notifyDataSetChanged();
-                chatDB.push().setValue(chatMessage);
+                chatDB.child(myApp.getShopName()).push().setValue(chatMessage);
+                //chatDB.push().setValue(chatMessage);
 
                 input.setText("");
                 sentDoNotRefresh = true; //need to set this to prevent onDataChange from populating data once send message is clicked
+
             }
         });
 

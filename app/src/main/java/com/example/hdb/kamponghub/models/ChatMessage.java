@@ -46,7 +46,7 @@ public class ChatMessage {
         this.createdAt = createdAt;
     }
 
-    public boolean msgIdentify() {return myMsg;}
+    public boolean getMsgType() {return myMsg;}
 
     public void setMsgType(boolean msgType) {this.myMsg = msgType;}
 }
