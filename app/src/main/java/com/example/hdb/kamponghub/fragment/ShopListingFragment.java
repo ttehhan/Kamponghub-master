@@ -50,6 +50,8 @@ public class ShopListingFragment extends Fragment {
     private DatabaseReference mDatabase;
     private ChildEventListener mShopListener; //not used
 
+
+
     //Model
     Shop shop;
 
@@ -138,9 +140,13 @@ public class ShopListingFragment extends Fragment {
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
         // [START recent_store_query]
-        // Last 100 posts, these are automatically the 100 most recent
-        // due to sorting by push() keys
-        Query recentStoreQuery = databaseReference.child("shops")
+        // Retrieve only same zone
+       /* Query recentStoreQuery = databaseReference.child("shops")
+                .limitToFirst(100);*/
+        //Hardcode now
+        //TODO: Change the zone
+        String zone = "South";
+        Query recentStoreQuery = databaseReference.child("shops").child(zone)
                 .limitToFirst(100);
         // [END recent_store_query]
 

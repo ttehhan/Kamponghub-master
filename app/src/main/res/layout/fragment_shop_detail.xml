@@ -4,10 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.hdb.kamponghub.fragment.ShopDetailFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/shopName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="20"
+            android:text="shopName"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/shopAddress"
+            android:layout_width="0dp"
+            android:layout_height="18dp"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="20"
+            android:text="shopAddress"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shopName" />
 
         <ImageView
             android:id="@+id/shopImage"
@@ -21,112 +55,116 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shopAddress" />
 
-        <TextView
-            android:id="@+id/shopName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:maxLines="1"
-            android:text="shopName"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/isShopOpen"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:maxLines="1"
-            android:text="isShopOpen"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
-
-        <TextView
-            android:id="@+id/shopTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="24dp"
-            android:maxLines="1"
-            android:text="shopTime"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/isShopOpen" />
-
-        <TextView
-            android:id="@+id/shopAddress"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:lines="5"
-            android:maxLines="1"
-            android:minLines="5"
-            android:text="shopAddress"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopName" />
-
         <Button
             android:id="@+id/btnRoute"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_directions_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnBookmark"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
-
-        <Button
-            android:id="@+id/btnBookmark"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/ic_bookmark_border_black_24dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
         <Button
             android:id="@+id/btnPhone"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_settings_phone_black_24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnBookmark" />
+            app:layout_constraintEnd_toStartOf="@+id/btnChat"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
         <Button
             android:id="@+id/btnChat"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_chat_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnPhone"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+
+        <Button
+            android:id="@+id/btnBookmark"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_bookmark_border_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toEndOf="@+id/btnRoute"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+
+        <TextView
+            android:id="@+id/isShopOpen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:maxLines="1"
+            android:text="isShopOpen"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnRoute" />
+
+        <TextView
+            android:id="@+id/shopTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:text="shopTime"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/isShopOpen" />
+
+        <TextView
+            android:id="@+id/shopPhone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:text="shopPhone"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shopTime" />
+
+        <TextView
+            android:id="@+id/shopDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="20"
+            android:text="shopDescription"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shopPhone" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -134,6 +172,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="192dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
 
         //Google Maps
         <!--        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -152,6 +194,5 @@
             tools:context="com.example.hdb.kamponghub.fragment.MapsFragment">
         </FrameLayout>-->
 
-    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

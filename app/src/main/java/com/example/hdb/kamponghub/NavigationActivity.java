@@ -58,6 +58,8 @@ public class NavigationActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });*/
+        //TODO: Change the zone
+        String userZone = "South";
 
         //Populate Content Area with Fragment
         fragment = new ShopListingFragment();
