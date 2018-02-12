@@ -24,9 +24,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Register extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
@@ -36,7 +33,6 @@ public class Register extends AppCompatActivity {
     private ActionBar actionBar;
     private DatabaseReference rootDB, userDB;
     private User userDetails;
-    private String emailText, userNameText, passwordText, addText, phoneText, UIDText;
 
 
     @Override
@@ -70,14 +66,14 @@ public class Register extends AppCompatActivity {
         return true;
     }
 
-    //method to register the user email and password into firebase auth table as well as put it into realtime db in order to relate to chatHistory table
+    //method to register the user email and password into firebase auth table
     protected void registerUser() {
         try {
-        emailText = email.getText().toString().trim();
-        userNameText = username.getText().toString().trim();
-        passwordText  = password.getText().toString().trim();
-        addText  = zipcode.getText().toString().trim();
-        phoneText  = phone.getText().toString().trim();
+        String emailText = email.getText().toString().trim();
+        String userNameText = username.getText().toString().trim();
+        String passwordText  = password.getText().toString().trim();
+        String addText  = zipcode.getText().toString().trim();
+        String phoneText  = phone.getText().toString().trim();
 
         if(TextUtils.isEmpty(emailText)){
             Toast.makeText(this,"Please enter email",Toast.LENGTH_LONG).show();
@@ -97,11 +93,14 @@ public class Register extends AppCompatActivity {
         if (phoneText.isEmpty()) { //phone no. is optional
             int addNo = Integer.parseInt(zipcode.getText().toString().trim());
             userDetails = new User(emailText, userNameText, addNo);
+            //userDB.push().setValue(userDetails); //pushes the data into firebase user table
         }else {
-            int phoneNo = Integer.parseInt(phone.getText().toString().trim()); //phone no. is entered
+            int phoneNo = Integer.parseInt(phone.getText().toString().trim()); //phone no. optional
             int addNo = Integer.parseInt(zipcode.getText().toString().trim());
             userDetails = new User(emailText, userNameText, addNo, phoneNo);
+            //userDB.push().setValue(userDetails); //pushes the data into firebase user table
         }
+
 
         //if the email and password are not empty, display progress dialog
         progressDialog.setMessage("Registering...");
@@ -113,10 +112,12 @@ public class Register extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if(task.isSuccessful()){
-                            userDB.child(userNameText).setValue(userDetails);
+                            String uid = firebaseAuth.getCurrentUser().getUid();
+                            userDB.child(uid).setValue(userDetails);
                             Toast.makeText(Register.this,"Successfully registered",Toast.LENGTH_LONG).show();
                             Intent i = new Intent(Register.this, MainActivity.class);
                             startActivity(i);
+
                         }else{
                             //display some message here
                             Toast.makeText(Register.this,"Registration Error",Toast.LENGTH_LONG).show();

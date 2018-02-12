@@ -4,17 +4,17 @@
     //Shop
     <item
         android:id="@+id/navigation_store"
-        android:icon="@drawable/ic_store"
+        android:icon="@drawable/ic_store_black_24dp"
         android:title="@string/title_store" />
 //Chat
     <item
         android:id="@+id/navigation_chat"
-        android:icon="@drawable/ic_chat"
+        android:icon="@drawable/ic_chat_black_24dp"
         android:title="@string/title_chat" />
 //Bookmark
     <item
         android:id="@+id/navigation_bookmark"
-        android:icon="@drawable/ic_bookmark"
+        android:icon="@drawable/ic_bookmark_black_24dp"
         android:title="@string/title_bookmark" />
 
 
