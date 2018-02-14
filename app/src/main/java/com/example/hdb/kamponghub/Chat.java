@@ -2,6 +2,7 @@ package com.example.hdb.kamponghub;
 
 import android.content.Intent;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.app.ProgressDialog;
 
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
@@ -48,18 +50,21 @@ public class Chat extends AppCompatActivity {
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB;
     private MyApplication myApp;
-    private String username;
+    private String userID;
     private ProgressDialog progressDialog;
     private boolean sentDoNotRefresh = false;
+    private SimpleDateFormat mdformat;
     //private FirebaseListAdapter<ChatMessage> adapter;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         myApp = (MyApplication) getApplicationContext(); //this is for sharing a variable across various fragment and activity
-        username = myApp.getUserName();
+        userID = myApp.getUserName();
         rootDB = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
-        Log.d("username", username);
-        chatDB = rootDB.child("chatHistory").child(username);
+        Log.d("username", userID);
+        chatDB = rootDB.child("chatHistory").child(userID);
         Log.d("shopname", myApp.getShopName());
         Query queryRef = chatDB.child(myApp.getShopName()).orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
@@ -96,12 +101,13 @@ public class Chat extends AppCompatActivity {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChatMessage chatMessage = new ChatMessage(input.getText().toString(), myApp.getEmail(), getCurrentTime(), true);
+                ChatMessage chatMessage = new ChatMessage(input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
                 chatMessage.setMsgType(true);
                 chatMsgHistory.add(chatMessage);
 
                 adapter.notifyDataSetChanged();
-                chatDB.child(myApp.getShopName()).push().setValue(chatMessage);
+                DatabaseReference shopBranch = chatDB.child(myApp.getShopName());
+                shopBranch.child(getCurrentDate()).push().setValue(chatMessage);
                 //chatDB.push().setValue(chatMessage);
 
                 input.setText("");
@@ -137,7 +143,14 @@ public class Chat extends AppCompatActivity {
 
     public String getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("hh:mm a");
+        mdformat = new SimpleDateFormat("hh:mm a");
+        String strTime = mdformat.format(calendar.getTime());
+        return strTime;
+    }
+
+    public String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        mdformat = new SimpleDateFormat("ddMMyyyy");
         String strDate = mdformat.format(calendar.getTime());
         return strDate;
     }

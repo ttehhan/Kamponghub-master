@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         forgetPass.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
-                String emailAddress = "tester0@test.com";
+                String emailAddress = "tester1@test.com";
 
                 auth.sendPasswordResetEmail(emailAddress)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                         //if the task is successful
                         if (task.isSuccessful()) {
                             //start the profile activity
+                            myApp.setUID(firebaseAuth.getCurrentUser().getUid());
                             finish();
                             Intent i = new Intent(MainActivity.this, NavigationActivity.class);
                             startActivity(i);

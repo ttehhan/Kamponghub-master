@@ -11,8 +11,9 @@ public class MyApplication extends Application {
     public MyApplication()
     {}
 
-    private static String UserEmail;
+    private static String userEmail;
     private static String userName;
+    private static String uid;
     private String shopName;
 
     public String getShopName()
@@ -22,14 +23,20 @@ public class MyApplication extends Application {
     {this.shopName = shopName;}
 
     public String getEmail()
-    {return UserEmail;}
+    {return userEmail;}
 
     public void setEmail(String email)
-    {this.UserEmail = email;}
+    {this.userEmail = email;}
 
     public String getUserName()
     {return userName;}
 
     public void setUserName (String userName)
     {this.userName = userName;}
+
+    public String getUID()
+    {return uid;}
+
+    public void setUID(String uidVal)
+    {this.uid = uidVal;}
 }

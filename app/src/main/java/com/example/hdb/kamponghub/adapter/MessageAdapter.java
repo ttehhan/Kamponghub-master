@@ -18,6 +18,7 @@ import java.util.List;
 public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     private Activity activity;
     private List<ChatMessage> messages;
+    private ChatMessage chatMessage;
 
     public MessageAdapter(Activity context, int resource, List<ChatMessage> objects) {
         super(context, resource, objects);
@@ -30,12 +31,11 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-
         int layoutResource = 0; // determined by view type
-        ChatMessage chatMessage = getItem(position);
+        chatMessage = getItem(position);
         int viewType = getItemViewType(position);
 
-        if (chatMessage.getMsgType() == true) { //if true, will put as my messsages
+        if (chatMessage.getMsgType()) { //if true, will put as my messsages
             layoutResource = R.layout.message_sent;
         }
         else {
@@ -68,7 +68,10 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     @Override
     public int getItemViewType(int position) {
         // return a value between 0 and (getViewTypeCount - 1)
-        return position % 2;
+        if(messages.get(position).getMsgType() == true)
+        {return 0;}
+        else
+        {return 1;}
     }
 
     private class ViewHolder {

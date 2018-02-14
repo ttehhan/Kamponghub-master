@@ -9,7 +9,8 @@ import java.util.Date;
 public class ChatMessage {
     private String msg;
     private String email;
-    private String createdAt;
+    private String createdAtTime;
+    private String createdAtDate;
     private boolean myMsg;
 
 
@@ -17,10 +18,10 @@ public class ChatMessage {
 
     }
 
-    public ChatMessage(String msg, String email, String createdAt, Boolean myMsg) {
+    public ChatMessage(String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
         this.msg = msg;
-        this.email = email;
-        this.createdAt = createdAt;
+        this.createdAtDate = createdAtDate;
+        this.createdAtTime = createdAtTime;
         this.myMsg = myMsg;
     }
 
@@ -38,12 +39,16 @@ public class ChatMessage {
         this.email= email;
     }
 
+    public String getDate() {return createdAtDate; }
+
+    public void setDate(String date) {this.createdAtDate = date; }
+
     public String getTime() {
-        return createdAt;
+        return createdAtTime;
     }
 
-    public void setTime(String createdAt) {
-        this.createdAt = createdAt;
+    public void setTime(String time) {
+        this.createdAtTime = time;
     }
 
     public boolean getMsgType() {return myMsg;}

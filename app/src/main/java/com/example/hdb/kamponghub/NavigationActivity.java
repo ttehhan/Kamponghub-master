@@ -25,6 +25,7 @@ import com.example.hdb.kamponghub.fragment.ChatFragment;
 import com.example.hdb.kamponghub.fragment.MapsFragment;
 import com.example.hdb.kamponghub.fragment.ProfileFragment;
 import com.example.hdb.kamponghub.fragment.ShopListingFragment;
+import com.example.hdb.kamponghub.models.MyApplication;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -38,6 +39,7 @@ public class NavigationActivity extends AppCompatActivity{
     //private TextView mTextMessage;
    // private ImageButton chatBtn;
    private Fragment fragment;
+   private MyApplication myApp;
     //Firebase variable
     private FirebaseAuth mAuth=FirebaseAuth.getInstance(); // <== To prevent null error in getUid();
 
@@ -45,19 +47,7 @@ public class NavigationActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        //chatBtn = (ImageButton)(findViewById(R.id.chatButton));
-       // mTextMessage = (TextView)findViewById(R.id.message);
-
-       /* chatBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-
-                Intent i = new Intent(NavigationActivity.this,Chat.class);
-                i.putExtra("email", UserEmail);
-                startActivity(i);
-            }
-        });*/
+        myApp = (MyApplication) getApplicationContext();
 
         //Populate Content Area with Fragment
         fragment = new ShopListingFragment();
@@ -148,10 +138,8 @@ public class NavigationActivity extends AppCompatActivity{
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     //Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
-                   // fragment= new ChatFragment();
-                    //goFragment(fragment,R.id.screen_area);
-                    Intent i = new Intent(NavigationActivity.this,Chat.class);
-                    startActivity(i);
+                    fragment= new ChatFragment();
+                    goFragment(fragment,R.id.screen_area);
                     return true;
                 case R.id.navigation_bookmark:
                    // mTextMessage.setText(R.string.title_bookmark);

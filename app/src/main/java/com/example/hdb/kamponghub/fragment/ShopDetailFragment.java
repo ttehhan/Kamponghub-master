@@ -24,8 +24,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hdb.kamponghub.Chat;
 import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
+import com.example.hdb.kamponghub.models.MyApplication;
 import com.example.hdb.kamponghub.models.Shop;
 import com.example.hdb.kamponghub.utilities.Calculations;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +70,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private Button btnPhone;
     private Button btnBookmark;
     private Button btnRoute;
+    private Button btnChat;
 
     //Firebase variables
     private DatabaseReference mShopReference;
@@ -77,6 +80,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private String shopLatitude, shopLongtitude;
     private String myLatitude, myLongtitude;
     private String phone;
+    private MyApplication myApp;
 
     //Model
     Shop shop;
@@ -93,6 +97,9 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_shop_detail, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Shop Detail");
+
+        //init the myApp shared object
+        myApp = (MyApplication) getActivity().getApplicationContext();
         //Set progress dialog
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
@@ -123,6 +130,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         btnPhone=rootView.findViewById(R.id.btnPhone);
         btnBookmark=rootView.findViewById(R.id.btnBookmark);
         btnRoute =  rootView.findViewById(R.id.btnRoute);
+        btnChat = rootView.findViewById(R.id.btnChat);
 
         //Go phone on imgBtnPhone click
         btnPhone.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +162,16 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
 
             }
         });
+
+        btnChat.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                myApp.setShopName(shop.getShopName());
+                Intent i = new Intent(getActivity().getApplicationContext(),Chat.class);
+                startActivity(i);
+            }
+            });
 
         //launches google map with origin set to your location to shop destination
         btnRoute.setOnClickListener(new View.OnClickListener() {
