@@ -57,7 +57,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     //Constants are for easy referencing for Log purposes
     private static final String TAG = ShopDetailFragment.class.getSimpleName();
     public static final String SHOP_DETAIL_KEY = "shop_detail_key";
-
+    public static final String SHOP_ZONE_KEY = "shop_zone_key";
 
     //Layout
     private ImageView shopImage;
@@ -65,6 +65,8 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private TextView isShopOpen;
     private TextView shopTime;
     private TextView shopAddress;
+    private TextView shopPhone;
+    private TextView shopDescription;
     private Fragment fragment;
     private ProgressDialog dialog;
     private Button btnPhone;
@@ -77,6 +79,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private DatabaseReference mLikeReference;
 
     private String mShopKey;
+    private String mZoneKey;
     private String shopLatitude, shopLongtitude;
     private String myLatitude, myLongtitude;
     private String phone;
@@ -113,11 +116,15 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             if (mShopKey == null) {
                 throw new IllegalArgumentException("Must pass SHOP_DETAIL_KEY");
             }
+            mZoneKey = bundle.getString(SHOP_ZONE_KEY, null);
+            if (mZoneKey == null) {
+                throw new IllegalArgumentException("Must pass SHOP_ZONE_KEY");
+            }
         }
         final String userId = ((NavigationActivity)getActivity()).getUid();
         // Initialize Database
         mShopReference = FirebaseDatabase.getInstance().getReference()
-                .child("shops").child(mShopKey);
+                .child("shops").child(mZoneKey).child(mShopKey);
         mLikeReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(userId).child("shopsLiked");
 
@@ -126,6 +133,8 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         shopName = rootView.findViewById(R.id.shopName);
         isShopOpen = rootView.findViewById(R.id.isShopOpen);
         shopTime = rootView.findViewById(R.id.shopTime);
+        shopPhone = rootView.findViewById(R.id.shopPhone);
+        shopDescription=rootView.findViewById(R.id.shopDescription);
         shopAddress=rootView.findViewById(R.id.shopAddress);
         btnPhone=rootView.findViewById(R.id.btnPhone);
         btnBookmark=rootView.findViewById(R.id.btnBookmark);
@@ -215,6 +224,8 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));
                 shopTime.setText(Calculations.calcTime(shop.getTimeStart(),shop.getTimeEnd()));
                 shopAddress.setText(shop.getShopAddress());
+                shopPhone.setText(shop.getPhoneNumber().toString());
+                shopDescription.setText(shop.getShopDescription());
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }

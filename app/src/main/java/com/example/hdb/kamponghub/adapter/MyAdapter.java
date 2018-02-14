@@ -47,6 +47,7 @@ public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
 
         // Set click listener for the shop view
         final String shopKey = shopRef.getKey();
+        final String shopZone = shopRef.getParent().getKey();
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +55,7 @@ public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
                 Fragment newFragment= new ShopDetailFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(ShopDetailFragment.SHOP_DETAIL_KEY, shopKey);
+                bundle.putString(ShopDetailFragment.SHOP_ZONE_KEY, shopZone);
                 newFragment.setArguments(bundle);
                 ((NavigationActivity)fragment.getActivity()).goFragment(newFragment,R.id.screen_area);
             }
