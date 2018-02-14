@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.hdb.kamponghub.fragment.BookMarkFragment;
 import com.example.hdb.kamponghub.fragment.ChatFragment;
+import com.example.hdb.kamponghub.models.MyApplication;
 import com.example.hdb.kamponghub.fragment.MapsFragment;
 import com.example.hdb.kamponghub.fragment.ProfileFragment;
 import com.example.hdb.kamponghub.fragment.ShopListingFragment;
@@ -150,10 +151,10 @@ public class NavigationActivity extends AppCompatActivity{
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     //Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
-                   // fragment= new ChatFragment();
-                    //goFragment(fragment,R.id.screen_area);
-                    Intent i = new Intent(NavigationActivity.this,Chat.class);
-                    startActivity(i);
+                    fragment= new ChatFragment();
+                    goFragment(fragment,R.id.screen_area);
+                    //Intent i = new Intent(NavigationActivity.this,Chat.class);
+                    //startActivity(i);
                     return true;
                 case R.id.navigation_bookmark:
                    // mTextMessage.setText(R.string.title_bookmark);
