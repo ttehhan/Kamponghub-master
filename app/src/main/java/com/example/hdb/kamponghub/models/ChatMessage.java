@@ -11,6 +11,7 @@ public class ChatMessage {
     private String email;
     private String createdAtTime;
     private String createdAtDate;
+    private String sender;
     private boolean myMsg;
 
 
@@ -18,12 +19,17 @@ public class ChatMessage {
 
     }
 
-    public ChatMessage(String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
+    public ChatMessage(String sender, String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
+        this.sender = sender;
         this.msg = msg;
         this.createdAtDate = createdAtDate;
         this.createdAtTime = createdAtTime;
         this.myMsg = myMsg;
     }
+
+    public String getSender() { return sender;}
+
+    public void setSender(String sender) { this.sender = sender; }
 
     public String getMsg() {return msg;}
 

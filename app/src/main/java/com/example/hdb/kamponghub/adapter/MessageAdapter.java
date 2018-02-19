@@ -52,8 +52,9 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
 
         //set message content
         holder.msg.setText(chatMessage.getMsg());
-        holder.time.setText(chatMessage.getTime());
-        //holder.name.setText();
+        holder.time.setText(chatMessage.getDate()+", "+ chatMessage.getTime());
+        if(!chatMessage.getMsgType())
+        {holder.name.setText(chatMessage.getSender());}
 
         return convertView;
     }
@@ -75,14 +76,16 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     }
 
     private class ViewHolder {
+        private TextView name;
         private TextView msg;
         private TextView time;
-        private TextView name;
+
 
         public ViewHolder(View v) {
+            name = (TextView) v.findViewById(R.id.text_message_name);
             msg = (TextView) v.findViewById(R.id.text_message_body);
             time = (TextView) v.findViewById(R.id.text_message_time);
-            name = (TextView) v.findViewById(R.id.text_message_name);
+
         }
     }
 

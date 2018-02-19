@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
        //For Test
         if(TextUtils.isEmpty(email) && (TextUtils.isEmpty(password)))
         {
-            email = "lee@example.com";
-            password ="password";
+            email = "tester1@test.com";
+            password ="123456";
         }
         myApp.setEmail(email);
         userDB.orderByChild("email").addChildEventListener(new ChildEventListener() {

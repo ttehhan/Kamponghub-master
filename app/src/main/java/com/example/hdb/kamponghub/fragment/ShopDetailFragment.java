@@ -176,6 +176,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
 
             @Override
             public void onClick(View v) {
+                //myApp.setShopName(mShopKey);
                 myApp.setShopName(shop.getShopName());
                 Intent i = new Intent(getActivity().getApplicationContext(),Chat.class);
                 startActivity(i);
