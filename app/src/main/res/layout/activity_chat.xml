@@ -52,11 +52,10 @@
             android:layout_width="40dp"
             android:layout_height="28dp"
             android:layout_gravity="center"
-            android:src="@drawable/upload_button"
+            android:src="@android:drawable/ic_menu_camera"
             android:clickable="true"
             android:gravity="center"
-            android:text="SEND"
-            android:textSize="14dp" />
+            android:text="SEND" />
 
         <EditText
             android:id="@+id/edittext_chatbox"

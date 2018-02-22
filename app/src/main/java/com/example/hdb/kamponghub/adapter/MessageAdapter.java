@@ -1,10 +1,12 @@
 package com.example.hdb.kamponghub.adapter;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.hdb.kamponghub.models.ChatMessage;
@@ -51,10 +53,18 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         }
 
         //set message content
-        holder.msg.setText(chatMessage.getMsg());
-        holder.time.setText(chatMessage.getDate()+", "+ chatMessage.getTime());
-        if(!chatMessage.getMsgType())
-        {holder.name.setText(chatMessage.getSender());}
+        if(TextUtils.isEmpty(chatMessage.getMsg()))
+        {
+            holder.image.setImageBitmap(chatMessage.getImage());
+            holder.imageTime.setText(chatMessage.getDate() + ", " + chatMessage.getTime());
+            holder.msg.setVisibility(View.INVISIBLE);
+        }else {
+            holder.msg.setText(chatMessage.getMsg());
+            holder.msgTime.setText(chatMessage.getDate() + ", " + chatMessage.getTime());
+            if (!chatMessage.getMsgType()) {
+                holder.name.setText(chatMessage.getSender());
+            }
+        }
 
         return convertView;
     }
@@ -63,29 +73,35 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     public int getViewTypeCount() {
         // return the total number of view types. this value should never change
         // at runtime
-        return 2;
+        return 3;
     }
 
     @Override
     public int getItemViewType(int position) {
         // return a value between 0 and (getViewTypeCount - 1)
-        if(messages.get(position).getMsgType() == true)
-        {return 0;}
-        else
+        if(messages.get(position).getMsg() == null )
+        {
+           return 0;
+        }else if(messages.get(position).getMsgType() == true)
         {return 1;}
+        else
+        {return 2;}
     }
 
     private class ViewHolder {
         private TextView name;
         private TextView msg;
-        private TextView time;
+        private TextView msgTime;
+        private ImageView image;
+        private TextView imageTime;
 
 
         public ViewHolder(View v) {
             name = (TextView) v.findViewById(R.id.text_message_name);
             msg = (TextView) v.findViewById(R.id.text_message_body);
-            time = (TextView) v.findViewById(R.id.text_message_time);
-
+            msgTime = (TextView) v.findViewById(R.id.text_message_time);
+            image = (ImageView) v.findViewById(R.id.image_message_body);
+            imageTime = (TextView) v.findViewById(R.id.image_message_time);
         }
     }
 
