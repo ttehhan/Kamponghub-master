@@ -13,24 +13,28 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.widget.EditText;
-import android.widget.Button;
 import android.app.ProgressDialog;
 import android.widget.ImageView;
+import android.graphics.Bitmap;
 
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.Button;
 import android.content.DialogInterface;
+import android.util.Base64;
+import java.io.InputStream;
+import android.net.Uri;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Object;
+import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import com.example.hdb.kamponghub.adapter.MessageAdapter;
 import com.example.hdb.kamponghub.models.ChatMessage;
@@ -53,14 +57,15 @@ public class Chat extends AppCompatActivity {
     private List<ChatMessage> chatMsgHistory;
     private ArrayAdapter<ChatMessage> adapter;
     boolean myMsg = true;
-    private DatabaseReference rootDB, chatDB, shopDB;
+    private DatabaseReference rootDB, chatDB;
     private MyApplication myApp;
     private String userID;
     private ProgressDialog progressDialog;
     private boolean sentDoNotRefresh = false;
     private SimpleDateFormat mdformat;
     private static final int REQUEST_CAMERA = 1;
-    private static final int SELECT_FILE = 2;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri filePath;
     //private FirebaseListAdapter<ChatMessage> adapter;
 
 
@@ -143,6 +148,7 @@ public class Chat extends AppCompatActivity {
             }
         });
 
+
     }
     //method to create a navigation back button back to the MainActivity
     public boolean onOptionsItemSelected(MenuItem item){
@@ -193,7 +199,7 @@ public class Chat extends AppCompatActivity {
                         Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         pickPhoto.setType("image/*");
                         pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(pickPhoto , SELECT_FILE);
+                        startActivityForResult(Intent.createChooser(pickPhoto, "Select an image"), PICK_IMAGE_REQUEST);
                     }
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -202,6 +208,41 @@ public class Chat extends AppCompatActivity {
         });
         builder.show();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK  && data != null && data.getData() != null )
+        {
+                filePath=data.getData();
+            try {
+                adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
+                listView.setAdapter(adapter);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                ChatMessage chatImage = new ChatMessage(myApp.getShopName(), bitmap ,getCurrentDate(), getCurrentTime(), true);
+                chatMsgHistory.add(chatImage);
+                adapter.notifyDataSetChanged();
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immagex=image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+
+        Log.e("ImageEncoded", imageEncoded);
+        return imageEncoded;
+    }
+
+
 
 
 }
