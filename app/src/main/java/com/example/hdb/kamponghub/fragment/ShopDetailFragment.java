@@ -219,7 +219,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                  shop = dataSnapshot.getValue(Shop.class);
-                shopImage.setImageBitmap(Calculations.base64ToBitmap(shop.getShopImage()));
+                shopImage.setImageBitmap(Calculations.base64ToBitmap(shop.getShopImage(),1000,600));
                 /*setImage(shop.getShopImageUrl());*/
                 shopName.setText(shop.getShopName());
                 isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));

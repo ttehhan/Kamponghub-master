@@ -35,17 +35,54 @@ public class Calculations {
         return("1km");
     }
 
-    public static String bitmapToBase64(Bitmap bitmap){
+    public static String bitmapToBase64(Bitmap bitmap, int quality){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    public static Bitmap base64ToBitmap(String base64string){
-        byte[] decodedString = Base64.decode(base64string, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    public static Bitmap base64ToBitmap(String base64string, int reqWidth, int reqHeight){
 
+        byte[] decodedString = Base64.decode(base64string, Base64.DEFAULT);
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length, options);
+
+        return bitmap;
+
+
+    }
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     public static String calculateZone(String postalCode){
