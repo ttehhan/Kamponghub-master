@@ -2,6 +2,7 @@ package com.example.hdb.kamponghub;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity; //make sures that it is backward compatible
 import android.support.annotation.NonNull;
@@ -42,6 +43,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,8 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private String email, password;
     private MyApplication myApp;
     private DatabaseReference userDB;
+    //Have another reference for logged in user
+    private DatabaseReference loginUser;
 
     private TextView forgetPass;
+
+    private String userZone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User userData = dataSnapshot.getValue(User.class);
                 myApp.setUserName(userData.getUsername());
+
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -151,13 +158,35 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
+                        //start the profile activity
+                        String userUid = firebaseAuth.getCurrentUser().getUid();
+
+                       // progressDialog.dismiss();
                         //if the task is successful
                         if (task.isSuccessful()) {
-                            //start the profile activity
-                            myApp.setUID(firebaseAuth.getCurrentUser().getUid());
+
+                            myApp.setUID(userUid);
+                            //Get user Zone to save in Shared Preference
+                            loginUser= FirebaseDatabase.getInstance().getReference().child("users").child(userUid);
+                            loginUser.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    User user = dataSnapshot.getValue(User.class);
+                                    SharedPreferences sharedPref = getSharedPreferences("USERZONE",Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("userZone", user.getUserZone());
+                                    editor.commit();
+
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Getting Shop failed, log a message
+                                    Log.w("MAINACTIVITY", "saveUser:onCancelled", databaseError.toException());
+                                }
+                            });
                             finish();
                             Intent i = new Intent(MainActivity.this, NavigationActivity.class);
                             startActivity(i);
@@ -175,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult login_result) {
+
+
                 Intent intent = new Intent(MainActivity.this, NavigationActivity.class);
                 startActivity(intent);
                 AccessToken AT = AccessToken.getCurrentAccessToken();

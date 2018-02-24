@@ -2,6 +2,8 @@ package com.example.hdb.kamponghub.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +40,7 @@ public class ShopListingFragment extends Fragment {
 
     //This constant is for easy referencing for Log purposes
     private static final String TAG = ShopListingFragment.class.getSimpleName();
+    private static final String ZONE = "userZone";
 
     //Layout
     private RecyclerView rvShopList;
@@ -143,9 +146,10 @@ public class ShopListingFragment extends Fragment {
         // Retrieve only same zone
        /* Query recentStoreQuery = databaseReference.child("shops")
                 .limitToFirst(100);*/
-        //Hardcode now
-        //TODO: Change the zone
-        String zone = "South";
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences("USERZONE",Context.MODE_PRIVATE);
+        String zone = sharedPref.getString(ZONE,"X");
+
         Query recentStoreQuery = databaseReference.child("shops").child(zone)
                 .limitToFirst(100);
         // [END recent_store_query]

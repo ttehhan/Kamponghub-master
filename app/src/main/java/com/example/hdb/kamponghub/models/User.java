@@ -12,6 +12,7 @@ public class User {
     private String username;
     private int address;
     private int phone;
+    private String userZone;
 
     private User() {
 
@@ -53,5 +54,11 @@ public class User {
     }
     public int getPhone() {return phone;}
     public void setPhone(int phone) {this.phone = phone;}
+    public String getUserZone() {
+        return userZone;
+    }
+    public void setUserZone(String userZone) {
+        this.userZone = userZone;
+    }
 
 }

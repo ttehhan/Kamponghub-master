@@ -1,6 +1,8 @@
 package com.example.hdb.kamponghub;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,6 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +29,18 @@ import com.example.hdb.kamponghub.models.MyApplication;
 import com.example.hdb.kamponghub.fragment.MapsFragment;
 import com.example.hdb.kamponghub.fragment.ProfileFragment;
 import com.example.hdb.kamponghub.fragment.ShopListingFragment;
+import com.example.hdb.kamponghub.models.User;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class NavigationActivity extends AppCompatActivity{
 
@@ -41,6 +49,8 @@ public class NavigationActivity extends AppCompatActivity{
    private Fragment fragment;
     //Firebase variable
     private FirebaseAuth mAuth=FirebaseAuth.getInstance(); // <== To prevent null error in getUid();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +69,6 @@ public class NavigationActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });*/
-        //TODO: Change the zone
-        String userZone = "South";
 
         //Populate Content Area with Fragment
         fragment = new ShopListingFragment();
