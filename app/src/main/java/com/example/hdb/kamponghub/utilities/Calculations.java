@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -347,8 +348,8 @@ public class Calculations {
 
         try {
             // May throw an IOException
-            address = coder.getFromLocationName(postalCode, 5);
-            if (address == null) {
+            address = coder.getFromLocationName(postalCode+"Singapore", 5);
+              if (address == null) {
                 return null;
             }
             Address location = address.get(0);
