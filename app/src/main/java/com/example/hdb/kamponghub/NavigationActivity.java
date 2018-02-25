@@ -132,10 +132,10 @@ public class NavigationActivity extends AppCompatActivity{
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 return true;
-            case R.id.menu_maps:
+            /*case R.id.menu_maps:
                 fragment= new MapsFragment();
                 goFragment(fragment,R.id.screen_area);
-                return true;
+                return true;*/
             //return super.onOptionsItemSelected(item);
         }
         return false;
