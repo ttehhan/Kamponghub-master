@@ -2,6 +2,8 @@ package com.example.hdb.kamponghub.models;
 
 import android.app.Application;
 
+import com.example.hdb.kamponghub.utilities.Calculations;
+
 /**
  * Created by TTH on 5/1/2018.
  */
@@ -10,7 +12,7 @@ public class User {
     private String FireUID;
     private String email;
     private String username;
-    private int address;
+    private int postal;
     private int phone;
     private String userZone;
 
@@ -18,18 +20,20 @@ public class User {
 
     }
 
-    public User (String email, String username, int address) {
+    public User (String email, String username, int postal) {
         this.email = email;
         this.username = username;
-        this.address = address;
+        this.postal = postal;
+        this.userZone = Calculations.calculateZone(String.valueOf(postal));
     }
 
     public User (String email, String username, int address, int phone)
     {
         this.email = email;
         this.username = username;
-        this.address = address;
+        this.postal = address;
         this.phone = phone;
+        this.userZone = Calculations.calculateZone(String.valueOf(postal));
     }
 
     //public String getFireUID() { return FireUID; }
@@ -46,11 +50,11 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-    public int getAddress() {
-        return address;
+    public int getPostal() {
+        return postal;
     }
-    public void setAddress(int address) {
-        this.address = address;
+    public void setPostal(int address) {
+        this.postal = address;
     }
     public int getPhone() {return phone;}
     public void setPhone(int phone) {this.phone = phone;}

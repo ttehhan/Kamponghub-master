@@ -12,10 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import com.example.hdb.kamponghub.R;
-import com.example.hdb.kamponghub.adapter.MyAdapter;
+import com.example.hdb.kamponghub.adapter.AdapterShopList;
 import com.example.hdb.kamponghub.models.Shop;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +29,7 @@ public class BookMarkFragment extends Fragment {
     //Layout
     private RecyclerView rvShopList;
     private LinearLayoutManager layoutManager;
-    private MyAdapter mFirebaseAdapter;
+    private AdapterShopList mFirebaseAdapter;
     private ProgressDialog dialog;
 
     //Firebase variables
@@ -80,7 +79,7 @@ public class BookMarkFragment extends Fragment {
                 .build();
 
         //Configure adapter
-        mFirebaseAdapter = new MyAdapter(options,this) {
+        mFirebaseAdapter = new AdapterShopList(options,this) {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();

@@ -222,6 +222,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 shopImage.setImageBitmap(Calculations.base64ToBitmap(shop.getShopImage(),1000,600));
                 /*setImage(shop.getShopImageUrl());*/
                 shopName.setText(shop.getShopName());
+                shopName.setSelected(true);
                 isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));
                 shopTime.setText(Calculations.calcTime(shop.getTimeStart(),shop.getTimeEnd()));
                 shopAddress.setText(shop.getShopAddress());

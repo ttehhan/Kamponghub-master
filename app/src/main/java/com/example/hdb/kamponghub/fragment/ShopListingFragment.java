@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,14 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
-import com.example.hdb.kamponghub.adapter.MyAdapter;
+import com.example.hdb.kamponghub.adapter.AdapterShopList;
 import com.example.hdb.kamponghub.models.Shop;
-import com.example.hdb.kamponghub.viewholder.ShopListHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -45,7 +39,7 @@ public class ShopListingFragment extends Fragment {
     //Layout
     private RecyclerView rvShopList;
     private LinearLayoutManager layoutManager;
-    private MyAdapter mFirebaseAdapter;
+    private AdapterShopList mFirebaseAdapter;
     private ProgressDialog dialog;
     private SearchView mSearchView;
 
@@ -98,7 +92,7 @@ public class ShopListingFragment extends Fragment {
                 .build();
 
         //Configure adapter
-        mFirebaseAdapter = new MyAdapter(options,this) {
+        mFirebaseAdapter = new AdapterShopList(options,this) {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();

@@ -31,6 +31,7 @@ public class ShopListHolder extends RecyclerView.ViewHolder{
         super(itemView);
         shopImage = (ImageView)itemView.findViewById(R.id.shopImage);
         shopName = (TextView)itemView.findViewById(R.id.shopName);
+        shopName.setSelected(true);
         shopIsOpen = (TextView)itemView.findViewById(R.id.isShopOpen);
         shopTime = (TextView)itemView.findViewById(R.id.shopTime);
         shopDistance = (TextView)itemView.findViewById(R.id.shopDistance);
