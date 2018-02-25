@@ -141,8 +141,8 @@ public class NavigationActivity extends AppCompatActivity{
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     //Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
-                    fragment= new ChatListingFragment();
-                    goFragment(fragment,R.id.screen_area);
+                 /*   fragment= new ChatListingFragment();
+                    goFragment(fragment,R.id.screen_area);*/
                     //Intent i = new Intent(NavigationActivity.this,Chat.class);
                     //startActivity(i);
                     return true;

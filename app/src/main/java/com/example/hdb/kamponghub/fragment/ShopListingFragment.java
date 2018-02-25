@@ -71,7 +71,7 @@ public class ShopListingFragment extends Fragment {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
-
+        dialog.setCanceledOnTouchOutside(false);
         // Set up Layout Manager, reverse layout
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);

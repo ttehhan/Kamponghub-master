@@ -159,6 +159,7 @@ public class ProfileFragment extends Fragment {
             //if the email and password are not empty, display progress dialog
             progressDialog.setMessage("Changing profile...");
             progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
             //Update Firebase Auth (email and password) + "/users"
             final String email = firebaseUser.getEmail();
             AuthCredential credential = EmailAuthProvider.getCredential(email,oldPasswordText);

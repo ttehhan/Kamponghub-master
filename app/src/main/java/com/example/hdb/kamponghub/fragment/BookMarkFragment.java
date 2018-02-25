@@ -58,7 +58,7 @@ public class BookMarkFragment extends Fragment {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
-
+        dialog.setCanceledOnTouchOutside(false);
         return rootView;
     }
 

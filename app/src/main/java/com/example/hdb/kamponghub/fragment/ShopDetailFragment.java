@@ -108,7 +108,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
-
+        dialog.setCanceledOnTouchOutside(false);
 
         // Get shop key from intent
         Bundle bundle = this.getArguments();
