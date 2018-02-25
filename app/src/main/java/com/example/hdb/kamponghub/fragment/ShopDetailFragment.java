@@ -73,6 +73,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private Button btnBookmark;
     private Button btnRoute;
     private Button btnChat;
+    private Button btnAdvert;
 
     //Firebase variables
     private DatabaseReference mShopReference;
@@ -140,7 +141,14 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         btnBookmark=rootView.findViewById(R.id.btnBookmark);
         btnRoute =  rootView.findViewById(R.id.btnRoute);
         btnChat = rootView.findViewById(R.id.btnChat);
-
+        btnAdvert = rootView.findViewById(R.id.btnAdvert);
+        //Go listing of shop's ads on click
+        btnAdvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"Advert",Toast.LENGTH_SHORT).show();
+            }
+        });
         //Go phone on imgBtnPhone click
         btnPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,8 +304,6 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             }
         } catch (SecurityException e) {    }
     }
-
-
 
 
     @Override

@@ -64,22 +64,42 @@
             android:id="@+id/btnRoute"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_directions_black_24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
         <Button
+            android:id="@+id/btnAdvert"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_description_black_24dp"
+            app:layout_constraintStart_toEndOf="@+id/btnRoute"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+
+        <Button
+            android:id="@+id/btnBookmark"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_bookmark_border_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnPhone"
+            app:layout_constraintStart_toEndOf="@+id/btnAdvert"
+            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
+
+        <Button
             android:id="@+id/btnPhone"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_settings_phone_black_24dp"
             app:layout_constraintEnd_toStartOf="@+id/btnChat"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
         <Button
@@ -90,18 +110,6 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_chat_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopImage" />
-
-        <Button
-            android:id="@+id/btnBookmark"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/ic_bookmark_border_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toEndOf="@+id/btnRoute"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
         <TextView
