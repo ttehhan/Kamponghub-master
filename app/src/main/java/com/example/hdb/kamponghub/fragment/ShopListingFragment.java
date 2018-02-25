@@ -71,13 +71,7 @@ public class ShopListingFragment extends Fragment {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
-        return rootView;
 
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         // Set up Layout Manager, reverse layout
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
@@ -109,6 +103,44 @@ public class ShopListingFragment extends Fragment {
 
         //Set adapter
         rvShopList.setAdapter(mFirebaseAdapter);
+        return rootView;
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+      /*  // Set up Layout Manager, reverse layout
+        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        rvShopList.setLayoutManager(layoutManager);
+
+        // Set up FirebaseRecyclerAdapter with the Query
+        Query shopQuery = getQuery(mDatabase);
+
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Shop>()
+                .setQuery(shopQuery, Shop.class)
+                .build();
+
+        //Configure adapter
+        mFirebaseAdapter = new AdapterShopList(options,this) {
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+
+        };
+        //Set divider between items
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvShopList.getContext(),
+                layoutManager.getOrientation());
+        rvShopList.addItemDecoration(dividerItemDecoration);
+
+        //Set adapter
+        rvShopList.setAdapter(mFirebaseAdapter);*/
 
     }
 
