@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.app.ProgressDialog;
+import android.view.WindowManager;
 
 import com.example.hdb.kamponghub.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 
 public class Register extends AppCompatActivity {
 
@@ -54,6 +56,7 @@ public class Register extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 registerUser();
+                progressDialog.dismiss();
             }
         });
         actionBar.setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity
@@ -105,6 +108,7 @@ public class Register extends AppCompatActivity {
         //if the email and password are not empty, display progress dialog
         progressDialog.setMessage("Registering...");
         progressDialog.show();
+        progressDialog.setCanceledOnTouchOutside(false);
         //creating a new user
         firebaseAuth.createUserWithEmailAndPassword(emailText, passwordText)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -122,7 +126,6 @@ public class Register extends AppCompatActivity {
                             //display some message here
                             Toast.makeText(Register.this,"Registration Error",Toast.LENGTH_LONG).show();
                         }
-                        progressDialog.dismiss();
                         }
                 });
         }catch(NullPointerException e) {

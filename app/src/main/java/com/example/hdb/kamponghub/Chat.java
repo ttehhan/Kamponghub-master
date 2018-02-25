@@ -16,19 +16,20 @@ import android.view.MotionEvent;
 import android.app.ProgressDialog;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.database.Cursor;
 
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.Button;
 import android.content.DialogInterface;
 import android.util.Base64;
-import java.io.InputStream;
 import android.net.Uri;
 import java.io.IOException;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.example.hdb.kamponghub.adapter.MessageAdapter;
 import com.example.hdb.kamponghub.models.ChatMessage;
 import com.example.hdb.kamponghub.models.MyApplication;
 import com.example.hdb.kamponghub.models.User;
+import com.example.hdb.kamponghub.utilities.Calculations;
 import com.example.hdb.kamponghub.utilities.Permissions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,7 +59,7 @@ public class Chat extends AppCompatActivity {
     private List<ChatMessage> chatMsgHistory;
     private ArrayAdapter<ChatMessage> adapter;
     boolean myMsg = true;
-    private DatabaseReference rootDB, chatDB;
+    private DatabaseReference rootDB, chatDB,shopBranch;
     private MyApplication myApp;
     private String userID;
     private ProgressDialog progressDialog;
@@ -65,7 +67,7 @@ public class Chat extends AppCompatActivity {
     private SimpleDateFormat mdformat;
     private static final int REQUEST_CAMERA = 1;
     private final int PICK_IMAGE_REQUEST = 71;
-    private Uri filePath;
+    private Uri imageURI;
     //private FirebaseListAdapter<ChatMessage> adapter;
 
 
@@ -79,6 +81,7 @@ public class Chat extends AppCompatActivity {
         Log.d("username", userID);
         chatDB = rootDB.child("chatHistory").child(userID);
         Log.d("shopname", myApp.getShopName());
+        shopBranch = chatDB.child(myApp.getShopName());
         Query queryRef = chatDB.child(myApp.getShopName()).orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
 
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
@@ -117,6 +120,7 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectImage();
+                sentDoNotRefresh = true;
             }
             });
 
@@ -128,7 +132,6 @@ public class Chat extends AppCompatActivity {
                 chatMsgHistory.add(chatMessage);
 
                 adapter.notifyDataSetChanged();
-                DatabaseReference shopBranch = chatDB.child(myApp.getShopName());
                 //shopBranch.child(getCurrentDate()).push().setValue(chatMessage);
                 shopBranch.push().setValue(chatMessage);
 
@@ -214,15 +217,13 @@ public class Chat extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK  && data != null && data.getData() != null )
         {
-                filePath=data.getData();
+                imageURI = data.getData();
             try {
                 adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
                 listView.setAdapter(adapter);
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                ChatMessage chatImage = new ChatMessage(myApp.getShopName(), bitmap ,getCurrentDate(), getCurrentTime(), true);
-                chatMsgHistory.add(chatImage);
-                adapter.notifyDataSetChanged();
-
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageURI);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 00, 200, false);
+                storeImageToFirebase(resizedBitmap);
             }
             catch (IOException e)
             {
@@ -231,18 +232,18 @@ public class Chat extends AppCompatActivity {
         }
     }
 
-    public static String encodeTobase64(Bitmap image) {
-        Bitmap immagex=image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+    private void storeImageToFirebase(Bitmap imageSelected) {
 
-        Log.e("ImageEncoded", imageEncoded);
-        return imageEncoded;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageSelected.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+        String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+        // we finally have our base64 string version of the image, save it.
+        ChatMessage chatImage = new ChatMessage(myApp.getShopName(), true, getCurrentDate(), getCurrentTime(), base64Image);
+        chatMsgHistory.add(chatImage);
+        adapter.notifyDataSetChanged();
+        shopBranch.push().setValue(chatImage);
     }
-
-
 
 
 }

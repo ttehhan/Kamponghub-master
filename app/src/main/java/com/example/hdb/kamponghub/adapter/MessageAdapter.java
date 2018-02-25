@@ -9,8 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.hdb.kamponghub.models.ChatMessage;
 import com.example.hdb.kamponghub.R;
+import com.example.hdb.kamponghub.utilities.Calculations;
 
 import java.util.List;
 /**
@@ -26,6 +28,7 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         super(context, resource, objects);
         this.activity = context;
         this.messages = objects;
+
     }
 
 
@@ -53,9 +56,9 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         }
 
         //set message content
-        if(TextUtils.isEmpty(chatMessage.getMsg()))
+        if(chatMessage.getImage() != null)
         {
-            holder.image.setImageBitmap(chatMessage.getImage());
+            holder.image.setImageBitmap(Calculations.base64ToBitmap(chatMessage.getImage()));
             holder.imageTime.setText(chatMessage.getDate() + ", " + chatMessage.getTime());
             holder.msg.setVisibility(View.INVISIBLE);
         }else {

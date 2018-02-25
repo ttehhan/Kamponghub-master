@@ -7,22 +7,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hdb.kamponghub.fragment.BookMarkFragment;
-import com.example.hdb.kamponghub.fragment.ChatFragment;
-import com.example.hdb.kamponghub.models.MyApplication;
+import com.example.hdb.kamponghub.fragment.ChatListingFragment;
 import com.example.hdb.kamponghub.fragment.MapsFragment;
 import com.example.hdb.kamponghub.fragment.ProfileFragment;
 import com.example.hdb.kamponghub.fragment.ShopListingFragment;
@@ -32,7 +23,6 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class NavigationActivity extends AppCompatActivity{
 
@@ -151,7 +141,7 @@ public class NavigationActivity extends AppCompatActivity{
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     //Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
-                    fragment= new ChatFragment();
+                    fragment= new ChatListingFragment();
                     goFragment(fragment,R.id.screen_area);
                     //Intent i = new Intent(NavigationActivity.this,Chat.class);
                     //startActivity(i);

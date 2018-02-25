@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.WindowManager;
 
 import com.example.hdb.kamponghub.models.MyApplication;
 import com.facebook.AccessToken;
@@ -146,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Password cannot be empty!",Toast.LENGTH_LONG).show();
             return;
         }*/
+
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 

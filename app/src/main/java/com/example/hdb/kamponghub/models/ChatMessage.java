@@ -14,14 +14,14 @@ public class ChatMessage {
     private String createdAtDate;
     private String sender;
     private boolean myMsg;
-    private Bitmap image;
+    private String image;
 
 
     public ChatMessage () {
 
     }
 
-    public ChatMessage (String sender, Bitmap image, String createdAtDate, String createdAtTime, Boolean myMsg) {
+    public ChatMessage (String sender, Boolean myMsg, String createdAtDate, String createdAtTime, String image) {
         this.sender = sender;
         this.image = image;
         this.createdAtDate = createdAtDate;
@@ -61,9 +61,9 @@ public class ChatMessage {
     public void setMsgType(boolean msgType) {this.myMsg = msgType;}
 
 
-    public Bitmap getImage() {return image;}
+    public String getImage() {return image;}
 
-    public void setImage(Bitmap imageSelected) {this.image = imageSelected;
+    public void setImage(String imageSelected) {this.image = imageSelected;
     }
 
     public String getEmail() {return email;
