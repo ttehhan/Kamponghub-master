@@ -58,7 +58,7 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         //set message content
         if(chatMessage.getImage() != null)
         {
-            holder.image.setImageBitmap(Calculations.base64ToBitmap(chatMessage.getImage()));
+            holder.image.setImageBitmap(Calculations.base64ToBitmap(chatMessage.getImage(),1000,600));
             holder.imageTime.setText(chatMessage.getDate() + ", " + chatMessage.getTime());
             holder.msg.setVisibility(View.INVISIBLE);
         }else {

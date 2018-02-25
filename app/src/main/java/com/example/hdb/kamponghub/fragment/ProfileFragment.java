@@ -173,7 +173,7 @@ public class ProfileFragment extends Fragment {
                                     Toast.makeText(getActivity(), "Something went wrong",Toast.LENGTH_LONG).show();
                                 }else {
                                     userDB.setValue(userDetails);
-                                    Toast.makeText(getActivity(), "Success",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Update Success",Toast.LENGTH_LONG).show();
                                     //Update Shared Preference
                                     SharedPreferences sharedPref = getContext().getSharedPreferences("USERZONE", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPref.edit();
