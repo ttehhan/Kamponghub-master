@@ -16,6 +16,7 @@ public class Advert {
     private String adImage;
     private String shopId;
     private String shopName;
+    private String shopZone;
     private String adDate;
     private String adDescription;
 
@@ -55,6 +56,13 @@ public class Advert {
     public String getAdDescription() {
         return adDescription;
     }
+    public String getShopZone() {
+        return shopZone;
+    }
+
+    public void setShopZone(String shopZone) {
+        this.shopZone = shopZone;
+    }
 
     public void setAdDescription(String adDescription) {
         this.adDescription = adDescription;
@@ -67,6 +75,7 @@ public class Advert {
         result.put("shopName", shopName);
         result.put("adDescription", adDescription);
         result.put("adDate", adDate);
+        result.put("shopZone", shopZone);
        return result;
     }
 

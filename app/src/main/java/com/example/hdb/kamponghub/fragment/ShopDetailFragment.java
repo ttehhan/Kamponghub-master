@@ -146,7 +146,15 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         btnAdvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Advert",Toast.LENGTH_SHORT).show();
+     /*           Toast.makeText(getContext(),"Advert",Toast.LENGTH_SHORT).show();*/
+     //Go ShopAdFragment
+
+                Fragment newFragment= new ShopAdFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(ShopAdFragment.SHOP_KEY, mShopKey);
+                bundle.putString(ShopAdFragment.ZONE_KEY, mZoneKey);
+                newFragment.setArguments(bundle);
+                ((NavigationActivity)fragment.getActivity()).goFragment(newFragment,R.id.screen_area);
             }
         });
         //Go phone on imgBtnPhone click

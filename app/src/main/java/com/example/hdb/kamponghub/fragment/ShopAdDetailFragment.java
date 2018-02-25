@@ -31,6 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 public class ShopAdDetailFragment extends Fragment {
 
     public static final String SHOP_AD_KEY = "shop_ad_key";
+    public static final String SHOP_ID_KEY = "shop_id_key";
+    public static final String SHOP_ZONE_KEY = "shop_zone_key";
+
     private static final String TAG = ShopAdDetailFragment.class.getSimpleName();
 
     //Layout
@@ -44,6 +47,8 @@ public class ShopAdDetailFragment extends Fragment {
     //Firebase variables
     private DatabaseReference mAdReference;
     private String mAdKey;
+    private String mShopIdKey;
+    private String mShopZoneKey;
 
     //Model
     Advert advert;
@@ -71,13 +76,21 @@ public class ShopAdDetailFragment extends Fragment {
             if (mAdKey == null) {
                 throw new IllegalArgumentException("Must pass SHOP_AD_KEY");
             }
+            mShopIdKey = bundle.getString(SHOP_ID_KEY, null);
+            if (mShopIdKey == null) {
+                throw new IllegalArgumentException("Must pass SHOP_ID_KEY");
+            }
+            mShopZoneKey = bundle.getString(SHOP_ZONE_KEY, null);
+            if (mShopZoneKey == null) {
+                throw new IllegalArgumentException("Must pass SHOP_ZONE_KEY");
+            }
 
         }
         final String userId = ((NavigationActivity) getActivity()).getUid();
 
         // Initialize Database
         mAdReference = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(userId).child("ads").child(mAdKey);
+                .child("shops").child(mShopZoneKey).child(mShopIdKey).child("ads").child(mAdKey);
 
         // Initialize Views
         adImage = view.findViewById(R.id.adImage);
