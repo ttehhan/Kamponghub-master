@@ -44,7 +44,7 @@ public class Register extends AppCompatActivity {
         email = (EditText) findViewById(R.id.r_email);
         username = (EditText) findViewById(R.id.r_user);
         password = (EditText) findViewById(R.id.r_password);
-        zipcode = (EditText) findViewById(R.id.r_address);
+        zipcode = (EditText) findViewById(R.id.r_postal);
         phone = (EditText) findViewById(R.id.r_phone);
         signUpBtn = (Button) findViewById(R.id.signup);
 
@@ -75,7 +75,7 @@ public class Register extends AppCompatActivity {
         String emailText = email.getText().toString().trim();
         String userNameText = username.getText().toString().trim();
         String passwordText  = password.getText().toString().trim();
-        String addText  = zipcode.getText().toString().trim();
+        String postalText  = zipcode.getText().toString().trim();
         String phoneText  = phone.getText().toString().trim();
 
         if(TextUtils.isEmpty(emailText)){
@@ -88,19 +88,19 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        if(TextUtils.isEmpty(addText)){
+        if(TextUtils.isEmpty(postalText)){
             Toast.makeText(this,"Please enter zipcode",Toast.LENGTH_LONG).show();
             return;
         }
 
         if (phoneText.isEmpty()) { //phone no. is optional
-            int addNo = Integer.parseInt(zipcode.getText().toString().trim());
-            userDetails = new User(emailText, userNameText, addNo);
+            int postal = Integer.parseInt(zipcode.getText().toString().trim());
+            userDetails = new User(emailText, userNameText, postal);
             //userDB.push().setValue(userDetails); //pushes the data into firebase user table
         }else {
             int phoneNo = Integer.parseInt(phone.getText().toString().trim()); //phone no. optional
-            int addNo = Integer.parseInt(zipcode.getText().toString().trim());
-            userDetails = new User(emailText, userNameText, addNo, phoneNo);
+            int postal = Integer.parseInt(zipcode.getText().toString().trim());
+            userDetails = new User(emailText, userNameText, postal, phoneNo);
             //userDB.push().setValue(userDetails); //pushes the data into firebase user table
         }
 

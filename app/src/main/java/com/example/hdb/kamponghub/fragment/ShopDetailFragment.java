@@ -73,6 +73,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private Button btnBookmark;
     private Button btnRoute;
     private Button btnChat;
+    private Button btnAdvert;
 
     //Firebase variables
     private DatabaseReference mShopReference;
@@ -140,7 +141,22 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         btnBookmark=rootView.findViewById(R.id.btnBookmark);
         btnRoute =  rootView.findViewById(R.id.btnRoute);
         btnChat = rootView.findViewById(R.id.btnChat);
+        btnAdvert = rootView.findViewById(R.id.btnAdvert);
+        //Go listing of shop's ads on click
+        btnAdvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+     /*           Toast.makeText(getContext(),"Advert",Toast.LENGTH_SHORT).show();*/
+     //Go ShopAdFragment
 
+                Fragment newFragment= new ShopAdFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(ShopAdFragment.SHOP_KEY, mShopKey);
+                bundle.putString(ShopAdFragment.ZONE_KEY, mZoneKey);
+                newFragment.setArguments(bundle);
+                ((NavigationActivity)fragment.getActivity()).goFragment(newFragment,R.id.screen_area);
+            }
+        });
         //Go phone on imgBtnPhone click
         btnPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,9 +235,10 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                  shop = dataSnapshot.getValue(Shop.class);
-                shopImage.setImageBitmap(Calculations.base64ToBitmap(shop.getShopImage()));
+                shopImage.setImageBitmap(Calculations.base64ToBitmap(shop.getShopImage(),1000,600));
                 /*setImage(shop.getShopImageUrl());*/
                 shopName.setText(shop.getShopName());
+                shopName.setSelected(true);
                 isShopOpen.setText(Calculations.calcShopOpen(shop.getTimeStart(),shop.getTimeEnd(),"1200"));
                 shopTime.setText(Calculations.calcTime(shop.getTimeStart(),shop.getTimeEnd()));
                 shopAddress.setText(shop.getShopAddress());
@@ -235,14 +252,14 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 //Get phone number from database
                 phone = shop.getPhoneNumber().toString();
 
-               /* fragment = new MapsFragment();
+                fragment = new MapsFragment();
                 if (shopLatitude!=null && shopLongtitude!=null){
                     Bundle bundle = new Bundle();
                     bundle.putString(MapsFragment.SHOP_LATITUDE_KEY, shopLatitude);
                     bundle.putString(MapsFragment.SHOP_LONGTITUDE_KEY,shopLongtitude);
                     fragment.setArguments(bundle);
                 }
-                goChildFragment(fragment,R.id.childFragmentContainer);*/
+                goChildFragment(fragment,R.id.childFragmentContainer);
             }
 
             @Override
@@ -295,8 +312,6 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             }
         } catch (SecurityException e) {    }
     }
-
-
 
 
     @Override
@@ -352,10 +367,10 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 .into(shopImage);
     }*/
 
-/*    public void goChildFragment(Fragment fragment, int toReplace){
+    public void goChildFragment(Fragment fragment, int toReplace){
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(toReplace, fragment).commit();
-    }*/
+    }
 
     @Override
     public void onLocationChanged(Location location) {

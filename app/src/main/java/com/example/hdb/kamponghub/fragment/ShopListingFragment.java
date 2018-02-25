@@ -2,12 +2,12 @@ package com.example.hdb.kamponghub.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,14 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
-import com.example.hdb.kamponghub.adapter.MyAdapter;
+import com.example.hdb.kamponghub.adapter.AdapterShopList;
 import com.example.hdb.kamponghub.models.Shop;
-import com.example.hdb.kamponghub.viewholder.ShopListHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -38,11 +34,12 @@ public class ShopListingFragment extends Fragment {
 
     //This constant is for easy referencing for Log purposes
     private static final String TAG = ShopListingFragment.class.getSimpleName();
+    private static final String ZONE = "userZone";
 
     //Layout
     private RecyclerView rvShopList;
     private LinearLayoutManager layoutManager;
-    private MyAdapter mFirebaseAdapter;
+    private AdapterShopList mFirebaseAdapter;
     private ProgressDialog dialog;
     private SearchView mSearchView;
 
@@ -74,13 +71,7 @@ public class ShopListingFragment extends Fragment {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Loading data.");
         dialog.show();
-        return rootView;
 
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         // Set up Layout Manager, reverse layout
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
@@ -95,7 +86,7 @@ public class ShopListingFragment extends Fragment {
                 .build();
 
         //Configure adapter
-        mFirebaseAdapter = new MyAdapter(options,this) {
+        mFirebaseAdapter = new AdapterShopList(options,this) {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();
@@ -112,6 +103,44 @@ public class ShopListingFragment extends Fragment {
 
         //Set adapter
         rvShopList.setAdapter(mFirebaseAdapter);
+        return rootView;
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+      /*  // Set up Layout Manager, reverse layout
+        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        rvShopList.setLayoutManager(layoutManager);
+
+        // Set up FirebaseRecyclerAdapter with the Query
+        Query shopQuery = getQuery(mDatabase);
+
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Shop>()
+                .setQuery(shopQuery, Shop.class)
+                .build();
+
+        //Configure adapter
+        mFirebaseAdapter = new AdapterShopList(options,this) {
+            @Override
+            public void onDataChanged() {
+                super.onDataChanged();
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+
+        };
+        //Set divider between items
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvShopList.getContext(),
+                layoutManager.getOrientation());
+        rvShopList.addItemDecoration(dividerItemDecoration);
+
+        //Set adapter
+        rvShopList.setAdapter(mFirebaseAdapter);*/
 
     }
 
@@ -143,9 +172,10 @@ public class ShopListingFragment extends Fragment {
         // Retrieve only same zone
        /* Query recentStoreQuery = databaseReference.child("shops")
                 .limitToFirst(100);*/
-        //Hardcode now
-        //TODO: Change the zone
-        String zone = "South";
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences("USERZONE",Context.MODE_PRIVATE);
+        String zone = sharedPref.getString(ZONE,"X");
+
         Query recentStoreQuery = databaseReference.child("shops").child(zone)
                 .limitToFirst(100);
         // [END recent_store_query]

@@ -16,6 +16,8 @@ public class MyApplication extends Application {
     private static String uid;
     private String shopName;
 
+    private String userZone;
+
     public String getShopName()
     {return shopName;}
 
@@ -39,4 +41,13 @@ public class MyApplication extends Application {
 
     public void setUID(String uidVal)
     {this.uid = uidVal;}
+
+    public String getUserZone() {
+        return userZone;
+    }
+
+    public void setUserZone(String userZone) {
+        this.userZone = userZone;
+    }
+
 }

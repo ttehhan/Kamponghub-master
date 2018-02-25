@@ -16,6 +16,9 @@ import com.example.hdb.kamponghub.models.Shop;
 import com.example.hdb.kamponghub.viewholder.ShopListHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
@@ -24,13 +27,14 @@ import java.util.List;
  * Created by CSLee on 8/1/2018.
  */
 
-public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
+public class AdapterShopList extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
    private Fragment fragment;
-
-    public MyAdapter(@NonNull FirebaseRecyclerOptions<Shop> options) {
+   //Flag is for identifying calling fragment (i.e. Shop Listing or Bookmark fragment. The
+    private int flag;
+    public AdapterShopList(@NonNull FirebaseRecyclerOptions<Shop> options) {
         super(options);
     }
-    public MyAdapter(@NonNull FirebaseRecyclerOptions<Shop> options, Fragment fragment) {
+    public AdapterShopList(@NonNull FirebaseRecyclerOptions<Shop> options, Fragment fragment) {
         super(options);
         this.fragment=fragment;
          }
@@ -43,11 +47,13 @@ public class MyAdapter extends FirebaseRecyclerAdapter<Shop, ShopListHolder> {
     @Override
     protected void onBindViewHolder(ShopListHolder viewHolder, int position, final Shop model) {
 
+
         final DatabaseReference shopRef = getRef(position);
 
         // Set click listener for the shop view
         final String shopKey = shopRef.getKey();
-        final String shopZone = shopRef.getParent().getKey();
+       final String shopZone = model.getShopZone();
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
