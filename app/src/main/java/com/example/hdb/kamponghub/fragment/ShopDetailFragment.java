@@ -236,14 +236,14 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 //Get phone number from database
                 phone = shop.getPhoneNumber().toString();
 
-               /* fragment = new MapsFragment();
+                fragment = new MapsFragment();
                 if (shopLatitude!=null && shopLongtitude!=null){
                     Bundle bundle = new Bundle();
                     bundle.putString(MapsFragment.SHOP_LATITUDE_KEY, shopLatitude);
                     bundle.putString(MapsFragment.SHOP_LONGTITUDE_KEY,shopLongtitude);
                     fragment.setArguments(bundle);
                 }
-                goChildFragment(fragment,R.id.childFragmentContainer);*/
+                goChildFragment(fragment,R.id.childFragmentContainer);
             }
 
             @Override
@@ -353,10 +353,10 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 .into(shopImage);
     }*/
 
-/*    public void goChildFragment(Fragment fragment, int toReplace){
+    public void goChildFragment(Fragment fragment, int toReplace){
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(toReplace, fragment).commit();
-    }*/
+    }
 
     @Override
     public void onLocationChanged(Location location) {
