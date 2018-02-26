@@ -49,22 +49,19 @@ public class ChatListingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_chat_listing, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Inbox");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         myApp = new MyApplication();
+
         chatList = rootView.findViewById(R.id.chatListRecyclerView);
         chatList.setHasFixedSize(true);
         dialog = new ProgressDialog(this.getContext());
         dialog.setMessage("Loading.");
         dialog.show();
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        dialog.setCanceledOnTouchOutside(false);
         // Set up Layout Manager, reverse layout
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
@@ -96,6 +93,13 @@ public class ChatListingFragment extends Fragment {
 
         //Set adapter
         chatList.setAdapter(chatAdapter);
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
 
     }
 
@@ -124,7 +128,7 @@ public class ChatListingFragment extends Fragment {
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
         DatabaseReference chatDB = databaseReference.child("chatHistory");
-        Query recentStoreQuery = chatDB.child(myApp.getUserName()).limitToFirst(100);
+        Query recentStoreQuery = chatDB.child(myApp.getUserName()).child("U Stars Supermarket").limitToFirst(100);
         // [END recent_store_query]
         return recentStoreQuery;
     }

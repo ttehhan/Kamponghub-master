@@ -33,9 +33,10 @@ public class ChatListHolder extends RecyclerView.ViewHolder{
     public ChatListHolder(View itemView) {
         super(itemView);
         //shopProfile = (CircleImageView) itemView.findViewById(R.id.list_shop_profile);
-        shopName = (TextView)itemView.findViewById(R.id.shopName);
-        chatDateTime = (TextView)itemView.findViewById(R.id.isShopOpen);
-        msgContents = (TextView)itemView.findViewById(R.id.image_message_body);
+        shopName = (TextView)itemView.findViewById(R.id.list_shop_name);
+        shopName.setSelected(true);
+        chatDateTime = (TextView)itemView.findViewById(R.id.list_date_time);
+        msgContents = (TextView)itemView.findViewById(R.id.list_msg_content);
 
     }
     public void bindToList(ChatMessage chatMsg, View.OnClickListener clickListener) {
@@ -43,6 +44,10 @@ public class ChatListHolder extends RecyclerView.ViewHolder{
         setShopName(chatMsg.getSender());
         setDateTime(chatMsg.getDate(), chatMsg.getTime());
         setMsgContent(chatMsg.getMsg()); //gets the latest chat msg
+        /*setShopName("ABC 123");
+        setDateTime("Sun, 17 Mar 2018 10:00PM");
+        setMsgContent("A Polish expedition hoping to complete the first winter ascent of the world's second-highest mountain, K2, says one of its climbers appears to have launched an unauthorised solo attempt."); //gets the latest chat msg
+    */
     }
 
 
@@ -53,17 +58,19 @@ public class ChatListHolder extends RecyclerView.ViewHolder{
         shopProfile.setImageBitmap(bitmap);
     }*/
 
-    private void setShopName(String title)
+    public void setShopName(String title)
     {
         shopName.setText(title);
     }
 
+    //public void setDateTime(String date){chatDateTime.setText(date);}
+
     public void setDateTime(String date, String time){
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MM yyyy hh:mm a");
-        String dateTime = date.concat(time);
-        String strTime = sdf.format(dateTime);
-        chatDateTime.setText(strTime);
+        //String dateTime = date+" "+time;
+        //String strTime = sdf.format(dateTime);
+        chatDateTime.setText("Sun, 17 Mar 2018 10:00PM");
     }
 
     public void setMsgContent(String msg){

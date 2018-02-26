@@ -42,8 +42,7 @@ public class ChatListingAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
         final DatabaseReference shopRef = getRef(position);
 
         // Set click listener for the shop view
-        final String shopKey = shopRef.getKey();
-        final String shopZone = shopRef.getParent().getKey();
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
