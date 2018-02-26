@@ -67,10 +67,10 @@ public class ChatListHolder extends RecyclerView.ViewHolder{
 
     public void setDateTime(String date, String time){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MM yyyy hh:mm a");
-        //String dateTime = date+" "+time;
+        //SimpleDateFormat sdf = new SimpleDateFormat("EEE, ddMMyyyy hh:mm a");
+        String dateTime = date+" "+time;
         //String strTime = sdf.format(dateTime);
-        chatDateTime.setText("Sun, 17 Mar 2018 10:00PM");
+        chatDateTime.setText(dateTime);
     }
 
     public void setMsgContent(String msg){

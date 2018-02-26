@@ -3,11 +3,13 @@ package com.example.hdb.kamponghub.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,20 @@ import com.example.hdb.kamponghub.adapter.ChatListingAdapter;
 import com.example.hdb.kamponghub.models.ChatMessage;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.ObservableSnapshotArray;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import com.example.hdb.kamponghub.models.MyApplication;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
+import java.util.ArrayList;
 
 //Uses in class FirebaseRecycleAdapter
 
@@ -37,11 +46,13 @@ public class ChatListingFragment extends Fragment {
     private static final String TAG = ChatListingFragment.class.getSimpleName();
 
     //Layout
-    private RecyclerView chatList;
+    private RecyclerView chatListView;
     private LinearLayoutManager layoutManager;
     private ChatListingAdapter chatAdapter;
     private ProgressDialog dialog;
     private MyApplication myApp;
+    private List<ChatMessage> latestMsgList;
+
 
     //Firebase variables
     private DatabaseReference mDatabase;
@@ -53,11 +64,11 @@ public class ChatListingFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_chat_listing, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Inbox");
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         myApp = new MyApplication();
+        mDatabase = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
 
-        chatList = rootView.findViewById(R.id.chatListRecyclerView);
-        chatList.setHasFixedSize(true);
+        chatListView = rootView.findViewById(R.id.chatListRecyclerView);
+        chatListView.setHasFixedSize(true);
         dialog = new ProgressDialog(this.getContext());
         dialog.setMessage("Loading.");
         dialog.show();
@@ -66,17 +77,18 @@ public class ChatListingFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
-        chatList.setLayoutManager(layoutManager);
+        chatListView.setLayoutManager(layoutManager);
+        latestMsgList = new ArrayList<>();
 
         // Set up FirebaseRecyclerAdapter with the Query
-        Query chatQuery = getQuery(mDatabase);
 
+        Query chatQuery = getQuery(mDatabase);
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
                 .setQuery(chatQuery, ChatMessage.class)
                 .build();
-
+        //FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ChatMessage>().setSnapshotArray(listings).build();
         //Configure adapter
-        chatAdapter = new ChatListingAdapter(options,this) {
+        chatAdapter = new ChatListingAdapter(options,this, latestMsgList) {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();
@@ -87,12 +99,12 @@ public class ChatListingFragment extends Fragment {
 
         };
         //Set divider between items
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(chatList.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(chatListView.getContext(),
                 layoutManager.getOrientation());
-        chatList.addItemDecoration(dividerItemDecoration);
+        chatListView.addItemDecoration(dividerItemDecoration);
 
         //Set adapter
-        chatList.setAdapter(chatAdapter);
+        chatListView.setAdapter(chatAdapter);
         return rootView;
     }
 
@@ -122,15 +134,15 @@ public class ChatListingFragment extends Fragment {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
-    //TODO: Method necessary to tweak query in later stage (i.e. make this abstract class)
     // public abstract Query getQuery(DatabaseReference databaseReference);
 
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
-        DatabaseReference chatDB = databaseReference.child("chatHistory");
-        Query recentStoreQuery = chatDB.child(myApp.getUserName()).child("U Stars Supermarket").limitToFirst(100);
+        DatabaseReference latestChatList = databaseReference.child("latestChatList");
+        Query chatQuery = latestChatList.child(myApp.getUserName()).limitToFirst(1);
+        //Query recentStoreQuery = chatDB.child(myApp.getUserName()).limitToFirst(1);
         // [END recent_store_query]
-        return recentStoreQuery;
+        return chatQuery;
     }
 
 }

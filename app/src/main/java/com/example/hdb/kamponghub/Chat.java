@@ -60,6 +60,7 @@ public class Chat extends AppCompatActivity {
     private ArrayAdapter<ChatMessage> adapter;
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB,shopBranch;
+    private DatabaseReference latestMsgList; //stores only the latest message to display in chatListing
     private MyApplication myApp;
     private String userID;
     private ProgressDialog progressDialog;

@@ -18,6 +18,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.List;
+
 /**
  * Created by TTH on 25/2/2018.
  */
@@ -25,10 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 public class ChatListingAdapter extends FirebaseRecyclerAdapter<ChatMessage, ChatListHolder> {
    private Fragment fragment;
 
+
     public ChatListingAdapter(@NonNull FirebaseRecyclerOptions<ChatMessage> options) {super(options);}
-    public ChatListingAdapter(@NonNull FirebaseRecyclerOptions<ChatMessage> options, Fragment fragment) {
+    public ChatListingAdapter(@NonNull FirebaseRecyclerOptions<ChatMessage> options, Fragment fragment, List<ChatMessage> chatList) {
         super(options);
-        this.fragment=fragment;
+        this.fragment = fragment;
          }
     @Override
     public ChatListHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -37,7 +40,7 @@ public class ChatListingAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
     }
 
     @Override
-    protected void onBindViewHolder(ChatListHolder viewHolder, int position, final ChatMessage msg) {
+    protected void onBindViewHolder(ChatListHolder viewHolder, int position, ChatMessage msg) {
 
         final DatabaseReference shopRef = getRef(position);
 
