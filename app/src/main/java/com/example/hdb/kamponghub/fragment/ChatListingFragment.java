@@ -139,7 +139,7 @@ public class ChatListingFragment extends Fragment {
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
         DatabaseReference latestChatList = databaseReference.child("latestChatList");
-        Query chatQuery = latestChatList.child(myApp.getUserName()).limitToFirst(1);
+        Query chatQuery = latestChatList.child(myApp.getUserName()).limitToFirst(100);
         //Query recentStoreQuery = chatDB.child(myApp.getUserName()).limitToFirst(1);
         // [END recent_store_query]
         return chatQuery;

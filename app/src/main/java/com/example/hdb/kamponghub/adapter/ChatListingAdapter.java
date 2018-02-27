@@ -10,9 +10,7 @@ import android.widget.Toast;
 
 import com.example.hdb.kamponghub.NavigationActivity;
 import com.example.hdb.kamponghub.R;
-import com.example.hdb.kamponghub.fragment.ShopDetailFragment;
 import com.example.hdb.kamponghub.models.ChatMessage;
-import com.example.hdb.kamponghub.models.Shop;
 import com.example.hdb.kamponghub.viewholder.ChatListHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;

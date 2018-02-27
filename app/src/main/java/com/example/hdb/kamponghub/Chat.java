@@ -60,7 +60,8 @@ public class Chat extends AppCompatActivity {
     private ArrayAdapter<ChatMessage> adapter;
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB,shopBranch;
-    private DatabaseReference latestMsgList; //stores only the latest message to display in chatListing
+    private DatabaseReference latestMsgDB; //stores only the latest message to display in chatListing
+    private ChatMessage lastChatMsg;
     private MyApplication myApp;
     private String userID;
     private ProgressDialog progressDialog;
@@ -69,6 +70,7 @@ public class Chat extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 1;
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri imageURI;
+
     //private FirebaseListAdapter<ChatMessage> adapter;
 
 
@@ -128,13 +130,12 @@ public class Chat extends AppCompatActivity {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChatMessage chatMessage = new ChatMessage(myApp.getShopName(), input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
-                chatMessage.setMsgType(true);
-                chatMsgHistory.add(chatMessage);
+                lastChatMsg = new ChatMessage(myApp.getShopName(), input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
+                chatMsgHistory.add(lastChatMsg);
 
                 adapter.notifyDataSetChanged();
                 //shopBranch.child(getCurrentDate()).push().setValue(chatMessage);
-                shopBranch.push().setValue(chatMessage);
+                shopBranch.push().setValue(lastChatMsg);
 
                 input.setText("");
                 sentDoNotRefresh = true; //need to set this to prevent onDataChange from populating data once send message is clicked
@@ -214,6 +215,14 @@ public class Chat extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        // call the superclass method first
+        super.onStop();
+        latestMsgDB = rootDB.child("latestChatList").child(myApp.getUserName());
+        latestMsgDB.child(myApp.getShopName()).setValue(lastChatMsg);
+    }
+
+        @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK  && data != null && data.getData() != null )
