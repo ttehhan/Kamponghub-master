@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-
+        progressDialog.setCanceledOnTouchOutside(false);
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
