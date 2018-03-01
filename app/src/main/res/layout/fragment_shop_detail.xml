@@ -20,18 +20,18 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="shopName"
             android:ellipsize="marquee"
-            android:singleLine="true"
-            android:marqueeRepeatLimit ="marquee_forever"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
+            android:singleLine="true"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="shopName" />
 
         <TextView
             android:id="@+id/shopAddress"
@@ -42,11 +42,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:maxLines="20"
-            android:text="shopAddress"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopName" />
+            app:layout_constraintTop_toBottomOf="@+id/shopName"
+            tools:text="shopAddress" />
 
         <ImageView
             android:id="@+id/shopImage"
@@ -67,6 +67,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_directions_black_24dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
@@ -77,6 +78,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_description_black_24dp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/btnRoute"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
@@ -88,6 +90,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_bookmark_border_black_24dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/btnPhone"
             app:layout_constraintStart_toEndOf="@+id/btnAdvert"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
@@ -99,6 +102,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_settings_phone_black_24dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/btnChat"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
@@ -109,6 +113,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_chat_black_24dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shopImage" />
 
@@ -121,12 +126,12 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:maxLines="1"
-            android:text="isShopOpen"
             android:textAlignment="viewStart"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnRoute" />
+            app:layout_constraintTop_toBottomOf="@+id/btnRoute"
+            tools:text="isShopOpen" />
 
         <TextView
             android:id="@+id/shopTime"
@@ -137,13 +142,13 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:text="shopTime"
             android:textAlignment="viewStart"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/isShopOpen" />
+            app:layout_constraintTop_toBottomOf="@+id/isShopOpen"
+            tools:text="shopTime" />
 
         <TextView
             android:id="@+id/shopPhone"
@@ -154,13 +159,13 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:text="shopPhone"
             android:textAlignment="viewStart"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopTime" />
+            app:layout_constraintTop_toBottomOf="@+id/shopTime"
+            tools:text="shopPhone" />
 
         <TextView
             android:id="@+id/shopDescription"
@@ -171,13 +176,13 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:maxLines="20"
-            android:text="shopDescription"
             android:textAlignment="viewStart"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shopPhone" />
+            app:layout_constraintTop_toBottomOf="@+id/shopPhone"
+            tools:text="shopDescription" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -187,7 +192,8 @@
             app:layout_constraintGuide_begin="192dp" />
 
         //Google Maps
-                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/childFragmentContainer"
             android:layout_width="match_parent"
@@ -196,21 +202,23 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shopDescription"
             tools:context="com.example.hdb.kamponghub.fragment.MapsFragment">
-                    <fragment
-                        android:id="@+id/fragment"
-                        android:name="com.example.hdb.kamponghub.fragment.MapsFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent" />
+
+            <fragment
+                android:id="@+id/fragment"
+                android:name="com.example.hdb.kamponghub.fragment.MapsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
         </FrameLayout>
 
 

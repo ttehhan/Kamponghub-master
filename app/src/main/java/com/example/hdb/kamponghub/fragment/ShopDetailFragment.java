@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -74,7 +75,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private Button btnRoute;
     private Button btnChat;
     private Button btnAdvert;
-
+    private FrameLayout childFragmentContainer;
     //Firebase variables
     private DatabaseReference mShopReference;
     private DatabaseReference mLikeReference;
@@ -142,6 +143,8 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
         btnRoute =  rootView.findViewById(R.id.btnRoute);
         btnChat = rootView.findViewById(R.id.btnChat);
         btnAdvert = rootView.findViewById(R.id.btnAdvert);
+        childFragmentContainer=  rootView.findViewById(R.id.childFragmentContainer);
+
         //Go listing of shop's ads on click
         btnAdvert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,9 +247,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                 shopAddress.setText(shop.getShopAddress());
                 shopPhone.setText(shop.getPhoneNumber().toString());
                 shopDescription.setText(shop.getShopDescription());
-                if (dialog != null && dialog.isShowing()) {
-                    dialog.dismiss();
-                }
+
                 shopLatitude = shop.getShopLatitude();
                 shopLongtitude = shop.getShopLongitude();
                 //Get phone number from database
@@ -260,6 +261,17 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
                     fragment.setArguments(bundle);
                 }
                 goChildFragment(fragment,R.id.childFragmentContainer);
+                if (dialog != null && dialog.isShowing()) {
+                    //Restore views
+                    btnBookmark.setVisibility(View.VISIBLE);
+                    btnRoute.setVisibility(View.VISIBLE);
+                    btnAdvert.setVisibility(View.VISIBLE);
+                    btnChat.setVisibility(View.VISIBLE);
+                    btnPhone.setVisibility(View.VISIBLE);
+                    childFragmentContainer.setVisibility(View.VISIBLE);
+
+                    dialog.dismiss();
+                }
             }
 
             @Override
