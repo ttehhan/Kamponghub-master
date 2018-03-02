@@ -58,6 +58,7 @@ public class ChatListHolder extends RecyclerView.ViewHolder{
         shopProfile.setImageBitmap(bitmap);
     }*/
 
+
     public void setShopName(String title)
     {
         shopName.setText(title);

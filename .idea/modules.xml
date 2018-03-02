@@ -4,10 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kamponghub-master.iml" filepath="$PROJECT_DIR$/Kamponghub-master.iml" />
       <module fileurl="file://D:\APROJECTS\android\KamponghubNew\Kamponghub-master.iml" filepath="D:\APROJECTS\android\KamponghubNew\Kamponghub-master.iml" />
-      <module fileurl="file://D:\APROJECTS\android\Kamponghub-master\Kamponghub-master.iml" filepath="D:\APROJECTS\android\Kamponghub-master\Kamponghub-master.iml" />
       <module fileurl="file://D:\Program Files\Github\Kamponghub-master\KamponghubNew.iml" filepath="D:\Program Files\Github\Kamponghub-master\KamponghubNew.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\APROJECTS\android\Kamponghub-master\app\app.iml" filepath="D:\APROJECTS\android\Kamponghub-master\app\app.iml" />
     </modules>
   </component>
 </project>

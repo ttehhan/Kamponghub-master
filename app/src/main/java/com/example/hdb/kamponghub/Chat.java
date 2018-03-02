@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -90,8 +91,11 @@ public class Chat extends AppCompatActivity {
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
 
         LinearLayoutManager verticalScroll = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity
+
+        /*back navigation need some time to figure out
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity*/
         listView = (ListView)findViewById(R.id.list_msg);
         sendMessage = (Button)findViewById(R.id.button_chatbox_send);
         sendImage = (ImageView)findViewById(R.id.upload_image);
@@ -100,6 +104,7 @@ public class Chat extends AppCompatActivity {
         adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
         listView.setAdapter(adapter);
         progressDialog = new ProgressDialog(this);
+
 
         queryRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -118,6 +123,7 @@ public class Chat extends AppCompatActivity {
 
             }
         });
+
 
         sendImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,7 +225,10 @@ public class Chat extends AppCompatActivity {
         // call the superclass method first
         super.onStop();
         latestMsgDB = rootDB.child("latestChatList").child(myApp.getUserName());
-        latestMsgDB.child(myApp.getShopName()).setValue(lastChatMsg);
+        if(sentDoNotRefresh)
+        {
+            latestMsgDB.child(myApp.getShopName()).setValue(lastChatMsg);
+        }
     }
 
         @Override
