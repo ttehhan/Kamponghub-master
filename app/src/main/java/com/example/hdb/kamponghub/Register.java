@@ -29,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Register extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
-    private EditText email,password, username, zipcode,phone;
+    private EditText email,password, username, zipcode, phone;
     private Button signUpBtn;
     private ProgressDialog progressDialog;
     private ActionBar actionBar;
@@ -53,6 +53,7 @@ public class Register extends AppCompatActivity {
         userDB = rootDB.child("users");
         progressDialog = new ProgressDialog(this);
         actionBar = getSupportActionBar();
+        actionBar.setTitle("Register for an account");
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 registerUser();
@@ -79,17 +80,22 @@ public class Register extends AppCompatActivity {
         String phoneText  = phone.getText().toString().trim();
 
         if(TextUtils.isEmpty(emailText)){
-            Toast.makeText(this,"Please enter email",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Email address cannot be left blank",Toast.LENGTH_LONG).show();
             return;
         }
 
         if(TextUtils.isEmpty(passwordText)){
-            Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Password is required for login",Toast.LENGTH_LONG).show();
             return;
         }
 
-        if(TextUtils.isEmpty(postalText)){
-            Toast.makeText(this,"Please enter zipcode",Toast.LENGTH_LONG).show();
+            if(TextUtils.isEmpty(userNameText)){
+                Toast.makeText(this,"User name cannot be left blank",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(TextUtils.isEmpty(postalText)){
+            Toast.makeText(this,"Zipcode cannot be left blank",Toast.LENGTH_LONG).show();
             return;
         }
 

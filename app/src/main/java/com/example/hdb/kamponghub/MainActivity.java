@@ -3,13 +3,14 @@ package com.example.hdb.kamponghub;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity; //make sures that it is backward compatible
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,10 +20,11 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.WindowManager;
 
 import com.example.hdb.kamponghub.models.MyApplication;
 import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -34,10 +36,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FacebookAuthProvider;
 
-import com.example.hdb.kamponghub.models.MyApplication;
 import com.example.hdb.kamponghub.models.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +47,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+
+import org.json.JSONObject;
+import org.json.JSONException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference userDB;
     //Have another reference for logged in user
     private DatabaseReference loginUser;
-
     private TextView forgetPass;
 
     private String userZone;
@@ -68,19 +73,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myApp = (MyApplication) getApplicationContext();
-        emailText = (EditText) findViewById(R.id.email);
-        passwordText = (EditText) findViewById(R.id.password);
-        registerBtn = (Button) findViewById(R.id.register);
-        loginBtn = (Button) findViewById(R.id.login);
-        forgetPass = (TextView)findViewById(R.id.forgot_password);
+        emailText = findViewById(R.id.email);
+        passwordText = findViewById(R.id.password);
+        registerBtn = findViewById(R.id.register);
+        loginBtn = findViewById(R.id.login);
+        forgetPass = findViewById(R.id.forgot_password);
         callbackManager = CallbackManager.Factory.create();
-        LoginButton FBloginBtn = (LoginButton) findViewById(R.id.fb_login);
+        LoginButton FBloginBtn = findViewById(R.id.fb_login);
         FBloginBtn.setReadPermissions("email", "public_profile");
         getLoginDetails(FBloginBtn);
-        progressDialog = new ProgressDialog(this);
-        firebaseAuth = FirebaseAuth.getInstance(); //gets the firebase auth object
+        firebaseAuth = FirebaseAuth.getInstance();
         userDB = FirebaseDatabase.getInstance().getReference().child("users");
-
+        progressDialog = new ProgressDialog(this);
 
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
@@ -99,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
         forgetPass.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
                 String emailAddress = "tester1@test.com";
-
-                auth.sendPasswordResetEmail(emailAddress)
+                /*auth.sendPasswordResetEmail(emailAddress)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -110,11 +112,9 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"Password recovery mail sent",Toast.LENGTH_LONG).show();
                                 }
                             }
-                        });
+                        });*/
             }
         });
-
-
 
     }
 
@@ -158,48 +158,52 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        progressDialog.setCanceledOnTouchOutside(false);
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //start the profile activity
-                        String userUid = firebaseAuth.getCurrentUser().getUid();
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
-                       // progressDialog.dismiss();
-                        //if the task is successful
-                        if (task.isSuccessful()) {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            myApp.setUID(userUid);
-                            //Get user Zone to save in Shared Preference
-                            loginUser= FirebaseDatabase.getInstance().getReference().child("users").child(userUid);
-                            loginUser.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    User user = dataSnapshot.getValue(User.class);
-                                    SharedPreferences sharedPref = getSharedPreferences("USERZONE",Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPref.edit();
-                                    editor.putString("userZone", user.getUserZone());
-                                    editor.commit();
+                            //start the profile activity
+                            String userUid = firebaseAuth.getCurrentUser().getUid();
 
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Getting Shop failed, log a message
-                                    Log.w("MAINACTIVITY", "saveUser:onCancelled", databaseError.toException());
-                                }
-                            });
-                            finish();
-                            Intent i = new Intent(MainActivity.this, NavigationActivity.class);
-                            startActivity(i);
-                        } else {
-                            //display some message here
-                            Toast.makeText(MainActivity.this, "Wrong email or password used", Toast.LENGTH_LONG).show();
+                            // progressDialog.dismiss();
+                            //if the task is successful
+                            if (task.isSuccessful()) {
+
+                                myApp.setUID(userUid);
+                                //Get user Zone to save in Shared Preference
+                                loginUser = FirebaseDatabase.getInstance().getReference().child("users").child(userUid);
+                                loginUser.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        SharedPreferences sharedPref = getSharedPreferences("USERZONE", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putString("userZone", user.getUserZone());
+                                        editor.commit();
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // Getting Shop failed, log a message
+                                        Log.w("MAINACTIVITY", "saveUser:onCancelled", databaseError.toException());
+                                    }
+                                });
+                                finish();
+                                Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+                                startActivity(i);
+                            } else {
+                                //display some message here
+                                Toast.makeText(MainActivity.this, "Wrong email or password used", Toast.LENGTH_LONG).show();
+                            }
+                            progressDialog.dismiss();
+
                         }
-                        progressDialog.dismiss();
-                    }
-                });
+                    });
+
     }
 
     //Register a callback function with the facebook loginButton to respond to the login result
@@ -207,14 +211,33 @@ public class MainActivity extends AppCompatActivity {
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult login_result) {
-
-
-                Intent intent = new Intent(MainActivity.this, NavigationActivity.class);
-                startActivity(intent);
                 AccessToken AT = AccessToken.getCurrentAccessToken();
                 Log.d("access token", AT.toString());
                 handleFacebookAccessToken(login_result.getAccessToken());
+                GraphRequest.newMeRequest(
+                        login_result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject me, GraphResponse response) {
+                                try {
+                                    if (response.getError() != null) {
+                                        // handle error
+                                    } else {
+                                        // get id of user
+                                        String email = me.getString("id")+"@facebook.com";
+                                        myApp.setEmail(email);
+                                        //myApp.setEmail("tester2@test.com");
+                                    }
+                                } catch (JSONException e) {
+                            }
+                            }
+                        }).executeAsync();
+
+
+
+
             }
+
+
             @Override
             public void onCancel() {
                 // code for cancellation
@@ -229,15 +252,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
                         } else {
@@ -245,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
                             //Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+
                         }
 
                         // ...
@@ -268,6 +289,9 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             callbackManager.onActivityResult(requestCode, resultCode, data);
             Log.e("data",data.toString());
+            Intent i2 = new Intent(MainActivity.this, NavigationActivity.class);
+            startActivity(i2);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -287,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 
 }
 

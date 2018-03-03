@@ -10,6 +10,9 @@
     <string name="r_phone">Phone Number</string>
     <string name="registerBtn">Sign up</string>
     <string name="forgot">Forgot Password?</string>
+    <string name="cont">Confirm and continue</string>
+    <string name="finalstep">One last step before continuing. \nZip code is required in order for the app to work properly.</string>
+    <string name="cancel">Cancel</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -21,4 +24,5 @@
     <string name="title_profile">Profile</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_sample_action_bar">SampleActionBar</string>
+    <string name="title_activity_facebook_register">FacebookRegisterActivity</string>
 </resources>

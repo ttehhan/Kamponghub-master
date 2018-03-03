@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.example.hdb.kamponghub.fragment.BookMarkFragment;
 import com.example.hdb.kamponghub.fragment.ChatListingFragment;
-import com.example.hdb.kamponghub.fragment.MapsFragment;
 import com.example.hdb.kamponghub.fragment.ProfileFragment;
 import com.example.hdb.kamponghub.fragment.ShopListingFragment;
 import com.facebook.AccessToken;
@@ -141,7 +140,8 @@ public class NavigationActivity extends AppCompatActivity{
                 case R.id.navigation_chat:
                     //mTextMessage.setText(R.string.title_chat);
                     //Toast.makeText(NavigationActivity.this, "Chat", Toast.LENGTH_SHORT).show();
-                    fragment= new ChatListingFragment();
+                    //fragment= new ChatListingFragment();
+                    fragment = new ChatListingFragment();
                     goFragment(fragment,R.id.screen_area);
                     //Intent i = new Intent(NavigationActivity.this,Chat.class);
                     return true;
@@ -156,6 +156,7 @@ public class NavigationActivity extends AppCompatActivity{
             return false;
         }
     };
+
     public void goFragment(Fragment fragment, int toReplace){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
