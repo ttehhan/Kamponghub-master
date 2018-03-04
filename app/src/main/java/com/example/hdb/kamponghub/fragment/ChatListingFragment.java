@@ -64,7 +64,7 @@ public class ChatListingFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_chat_listing, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Inbox");
-        myApp = new MyApplication();
+        myApp = (MyApplication) getActivity().getApplicationContext();
         mDatabase = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
 
         chatListView = rootView.findViewById(R.id.chatListRecyclerView);
@@ -139,7 +139,7 @@ public class ChatListingFragment extends Fragment {
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
         DatabaseReference latestChatList = databaseReference.child("latestChatList");
-        Query chatQuery = latestChatList.child(myApp.getUserName()).limitToFirst(100);
+        Query chatQuery = latestChatList.child(myApp.getUID()).limitToFirst(100);
         //Query recentStoreQuery = chatDB.child(myApp.getUserName()).limitToFirst(1);
         // [END recent_store_query]
         return chatQuery;

@@ -47,13 +47,14 @@ public class ChatListingAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
     protected void onBindViewHolder(final ChatListHolder viewHolder, int position, ChatMessage msg) {
 
         final DatabaseReference shopRef = getRef(position);
-        final String shopName = msg.getSender();
+        //final String sender = msg.getSender();
+        final String ShopKey = shopRef.getKey();
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                myApp.setShopName(shopName);
+                myApp.setShopID(ShopKey);
                 Intent i = new Intent((fragment.getActivity()).getApplicationContext(),Chat.class);
                 fragment.startActivity(i);
 

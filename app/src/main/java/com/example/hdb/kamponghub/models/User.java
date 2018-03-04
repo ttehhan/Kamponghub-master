@@ -9,7 +9,7 @@ import com.example.hdb.kamponghub.utilities.Calculations;
  */
 
 public class User {
-    private String FireUID;
+    private String uid;
     private String email;
     private String username;
     private int postal;
@@ -36,8 +36,8 @@ public class User {
         this.userZone = Calculations.calculateZone(String.valueOf(postal));
     }
 
-    //public String getFireUID() { return FireUID; }
-   //public void setFireUID(String uid) { this.FireUID = uid; }
+    public String getUID() { return uid; }
+    public void setUID(String uid) { this.uid= uid; }
     public String getEmail() {
         return email;
     }

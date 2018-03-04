@@ -3,6 +3,7 @@ package com.example.hdb.kamponghub;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.FaceDetector;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -41,6 +42,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FacebookAuthProvider;
 
 import com.example.hdb.kamponghub.models.User;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     //Have another reference for logged in user
     private DatabaseReference loginUser;
     private TextView forgetPass;
-
+    private LoginButton FBloginBtn;
     private String userZone;
 
     @Override
@@ -79,14 +81,12 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.login);
         forgetPass = findViewById(R.id.forgot_password);
         callbackManager = CallbackManager.Factory.create();
-        LoginButton FBloginBtn = findViewById(R.id.fb_login);
+        FBloginBtn = findViewById(R.id.fb_login);
         FBloginBtn.setReadPermissions("email", "public_profile");
         getLoginDetails(FBloginBtn);
         firebaseAuth = FirebaseAuth.getInstance();
         userDB = FirebaseDatabase.getInstance().getReference().child("users");
         progressDialog = new ProgressDialog(this);
-
-
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,26 +126,9 @@ public class MainActivity extends AppCompatActivity {
        //For Test
         if(TextUtils.isEmpty(email) && (TextUtils.isEmpty(password)))
         {
-            email = "tester1@test.com";
+            email = "tester2@test.com";
             password ="123456";
         }
-        myApp.setEmail(email);
-        userDB.orderByChild("email").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User userData = dataSnapshot.getValue(User.class);
-                myApp.setUserName(userData.getUsername());
-
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
         /*if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter a valid email address",Toast.LENGTH_LONG).show();
             return;
@@ -225,16 +208,19 @@ public class MainActivity extends AppCompatActivity {
                                         // get id of user
                                         String email = me.getString("id")+"@facebook.com";
                                         myApp.setEmail(email);
-                                        //myApp.setEmail("tester2@test.com");
+                                        if(!checkIfEmailExistInFirebase(email)) {
+                                            Intent i = new Intent(MainActivity.this, FacebookRegisterActivity.class);
+                                            startActivity(i);
+
+                                        }else {
+                                            Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+                                            startActivity(i);
+                                        }
                                     }
                                 } catch (JSONException e) {
-                            }
+                                }
                             }
                         }).executeAsync();
-
-
-
-
             }
 
 
@@ -259,11 +245,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-
                         } else {
                             // If sign in fails, display a message to the user.
                             //Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "Facebook authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
@@ -289,8 +274,6 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             callbackManager.onActivityResult(requestCode, resultCode, data);
             Log.e("data",data.toString());
-            Intent i2 = new Intent(MainActivity.this, NavigationActivity.class);
-            startActivity(i2);
 
     }
     @Override
@@ -311,6 +294,31 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+    public boolean checkIfEmailExistInFirebase(String emailAddress)
+    {
+        final String emailAdd = emailAddress;
+        final boolean[] emailExist = new boolean[1];
+        Query getUser = userDB.orderByChild("email").equalTo(emailAdd);
+        getUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    if(singleSnapshot.exists()) {
+                        emailExist[0] = true;
+                    }else
+                    { emailExist[0] = false;}
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return emailExist[0];
+    }
+
 
 
 }

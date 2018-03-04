@@ -79,23 +79,24 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         myApp = (MyApplication) getApplicationContext(); //this is for sharing a variable across various fragment and activity
-        userID = myApp.getUserName();
+        userID = myApp.getUID();
 
         rootDB = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
         Log.d("username", userID);
         chatDB = rootDB.child("chatHistory").child(userID);
-        Log.d("shopname", myApp.getShopName());
-        shopBranch = chatDB.child(myApp.getShopName());
-        Query queryRef = chatDB.child(myApp.getShopName()).orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
+        Log.d("shopname", myApp.getShopID());
+        shopBranch = chatDB.child(myApp.getShopID());
+        Query queryRef = chatDB.child(myApp.getShopID()).orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
 
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
 
         LinearLayoutManager verticalScroll = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
-        /*back navigation need some time to figure out
+        /*TODO: back navigation need some time to figure out
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity*/
+        getSupportActionBar().setTitle(myApp.getShopName());
         listView = (ListView)findViewById(R.id.list_msg);
         sendMessage = (Button)findViewById(R.id.button_chatbox_send);
         sendImage = (ImageView)findViewById(R.id.upload_image);
@@ -224,10 +225,10 @@ public class Chat extends AppCompatActivity {
     protected void onStop() {
         // call the superclass method first
         super.onStop();
-        latestMsgDB = rootDB.child("latestChatList").child(myApp.getUserName());
+        latestMsgDB = rootDB.child("latestChatList").child(myApp.getUID());
         if(sentDoNotRefresh)
         {
-            latestMsgDB.child(myApp.getShopName()).setValue(lastChatMsg);
+            latestMsgDB.child(myApp.getShopID()).setValue(lastChatMsg);
         }
     }
 
@@ -258,7 +259,7 @@ public class Chat extends AppCompatActivity {
         byte[] bytes = stream.toByteArray();
         String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
         // we finally have our base64 string version of the image, save it.
-        ChatMessage chatImage = new ChatMessage(myApp.getShopName(), true, getCurrentDate(), getCurrentTime(), base64Image);
+        ChatMessage chatImage = new ChatMessage(myApp.getShopID(), true, getCurrentDate(), getCurrentTime(), base64Image);
         chatMsgHistory.add(chatImage);
         adapter.notifyDataSetChanged();
         shopBranch.push().setValue(chatImage);
