@@ -56,6 +56,10 @@ public class Register extends AppCompatActivity {
         actionBar.setTitle("Register for an account");
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                //if the email and password are not empty, display progress dialog
+                progressDialog.setMessage("Registering...");
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
                 registerUser();
                 progressDialog.dismiss();
             }
@@ -111,10 +115,7 @@ public class Register extends AppCompatActivity {
         }
 
 
-        //if the email and password are not empty, display progress dialog
-        progressDialog.setMessage("Registering...");
-        progressDialog.show();
-        progressDialog.setCanceledOnTouchOutside(false);
+
         //creating a new user
         firebaseAuth.createUserWithEmailAndPassword(emailText, passwordText)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.hdb.kamponghub.models.ChatMessage;
 import com.example.hdb.kamponghub.R;
+import com.example.hdb.kamponghub.models.MyApplication;
 import com.example.hdb.kamponghub.utilities.Calculations;
 
 import java.util.List;
@@ -23,11 +24,13 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     private Activity activity;
     private List<ChatMessage> messages;
     private ChatMessage chatMessage;
+    private MyApplication myApp;
 
     public MessageAdapter(Activity context, int resource, List<ChatMessage> objects) {
         super(context, resource, objects);
         this.activity = context;
         this.messages = objects;
+        myApp = (MyApplication) activity.getApplicationContext();
 
     }
 
@@ -40,7 +43,7 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         chatMessage = getItem(position);
         int viewType = getItemViewType(position);
 
-        if (chatMessage.getMsgType()) { //if true, will put as my messsages
+        if (chatMessage.getMsgType() ) { //if true, will put as my messsages
             layoutResource = R.layout.message_sent;
         }
         else {

@@ -15,22 +15,25 @@ public class ChatMessage {
     private String sender;
     private boolean myMsg;
     private String image;
+    private String receiverName;
 
 
     public ChatMessage () {
 
     }
 
-    public ChatMessage (String sender, Boolean myMsg, String createdAtDate, String createdAtTime, String image) {
+    public ChatMessage (String sender, String receiverName, Boolean myMsg, String createdAtDate, String createdAtTime, String image) {
         this.sender = sender;
+        this.receiverName = receiverName;
         this.image = image;
         this.createdAtDate = createdAtDate;
         this.createdAtTime = createdAtTime;
         this.myMsg = myMsg;
     }
 
-    public ChatMessage(String sender, String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
+    public ChatMessage(String sender, String receiverName, String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
         this.sender = sender;
+        this.receiverName = receiverName;
         this.msg = msg;
         this.createdAtDate = createdAtDate;
         this.createdAtTime = createdAtTime;
@@ -40,6 +43,10 @@ public class ChatMessage {
     public String getSender() { return sender;}
 
     public void setSender(String sender) { this.sender = sender; }
+
+    public String getReceiver() { return receiverName;}
+
+    public void setReceiver(String receiverName) { this.receiverName = receiverName; }
 
     public String getMsg() {return msg;}
 

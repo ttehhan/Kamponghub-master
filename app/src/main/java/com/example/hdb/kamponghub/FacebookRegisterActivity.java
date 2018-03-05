@@ -46,13 +46,17 @@ public class FacebookRegisterActivity extends AppCompatActivity {
         phone = findViewById(R.id.rr_phone);
         registerBtn = findViewById(R.id.fb_register);
         cancelBtn = findViewById(R.id.fb_cancel);
-        myApp = new MyApplication();
+        myApp = (MyApplication) getApplicationContext();
         getSupportActionBar().setTitle("Register Account for Facebook Users");
         rootDB = FirebaseDatabase.getInstance().getReference();
         userDB = rootDB.child("users");
         progressDialog = new ProgressDialog(this);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                //if the email and password are not empty, display progress dialog
+                progressDialog.setMessage("Registering...");
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
                 registerUser2();
                 progressDialog.dismiss();
             }
@@ -81,6 +85,7 @@ public class FacebookRegisterActivity extends AppCompatActivity {
     protected void registerUser2() {
         //method to register the user email and password into firebase auth table
         try {
+
             String emailText = myApp.getEmail();
             String userNameText = username.getText().toString().trim();
             String postalText = zipcode.getText().toString().trim();
@@ -106,10 +111,7 @@ public class FacebookRegisterActivity extends AppCompatActivity {
                 userDetails = new User(emailText, userNameText, postal, phoneNo);
                 //userDB.push().setValue(userDetails); //pushes the data into firebase user table
             }
-            //if the email and password are not empty, display progress dialog
-            progressDialog.setMessage("Registering...");
-            progressDialog.show();
-            progressDialog.setCanceledOnTouchOutside(false);
+
             firebaseAuth.createUserWithEmailAndPassword(emailText, postalText)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override

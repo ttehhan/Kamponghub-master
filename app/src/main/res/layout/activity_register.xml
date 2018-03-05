@@ -83,7 +83,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:hint="Phone"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:maxLines="1"
+                android:imeOptions="actionGo"/>
         </android.support.design.widget.TextInputLayout>
 
 

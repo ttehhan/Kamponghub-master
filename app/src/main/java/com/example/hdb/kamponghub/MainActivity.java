@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private Button loginBtn, registerBtn;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
-    private String email, password;
+    private String FBEmail, email, password;
     private MyApplication myApp;
     private DatabaseReference userDB;
     //Have another reference for logged in user
@@ -101,15 +101,17 @@ public class MainActivity extends AppCompatActivity {
             }
     });
 
+        //TODO add in workflow for send password to email
         forgetPass.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String emailAddress = "tester1@test.com";
+                Toast.makeText(MainActivity.this,"Password recovery mail sent",Toast.LENGTH_LONG).show();
                 /*auth.sendPasswordResetEmail(emailAddress)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(MainActivity.this,"Password recovery mail sent",Toast.LENGTH_LONG).show();
+
                                 }
                             }
                         });*/
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         User user = dataSnapshot.getValue(User.class);
+                                        myApp.setUserName(user.getUsername());
                                         SharedPreferences sharedPref = getSharedPreferences("USERZONE", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPref.edit();
                                         editor.putString("userZone", user.getUserZone());
@@ -206,21 +209,23 @@ public class MainActivity extends AppCompatActivity {
                                         // handle error
                                     } else {
                                         // get id of user
-                                        String email = me.getString("id")+"@facebook.com";
-                                        myApp.setEmail(email);
-                                        if(!checkIfEmailExistInFirebase(email)) {
-                                            Intent i = new Intent(MainActivity.this, FacebookRegisterActivity.class);
-                                            startActivity(i);
-
-                                        }else {
-                                            Intent i = new Intent(MainActivity.this, NavigationActivity.class);
-                                            startActivity(i);
-                                        }
+                                        FBEmail = me.getString("id")+"@facebook.com";
+                                        myApp.setEmail(FBEmail);
                                     }
                                 } catch (JSONException e) {
                                 }
                             }
                         }).executeAsync();
+
+                //TODO how to check the email exists in the user table only for first time users then go FB Register
+                if(!checkIfEmailExistInFirebase(FBEmail)) {
+                    Intent i = new Intent(MainActivity.this, FacebookRegisterActivity.class);
+                    startActivity(i);
+
+                }else {
+                    Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+                    startActivity(i);
+                }
             }
 
 
@@ -295,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    //method to check if FB email is not the first time login
     public boolean checkIfEmailExistInFirebase(String emailAddress)
     {
         final String emailAdd = emailAddress;

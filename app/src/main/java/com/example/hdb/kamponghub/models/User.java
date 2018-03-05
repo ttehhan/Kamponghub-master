@@ -27,11 +27,11 @@ public class User {
         this.userZone = Calculations.calculateZone(String.valueOf(postal));
     }
 
-    public User (String email, String username, int address, int phone)
+    public User (String email, String username, int postal, int phone)
     {
         this.email = email;
         this.username = username;
-        this.postal = address;
+        this.postal = postal;
         this.phone = phone;
         this.userZone = Calculations.calculateZone(String.valueOf(postal));
     }

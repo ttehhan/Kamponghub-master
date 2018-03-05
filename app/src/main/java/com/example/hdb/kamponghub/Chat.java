@@ -86,26 +86,27 @@ public class Chat extends AppCompatActivity {
         chatDB = rootDB.child("chatHistory").child(userID);
         Log.d("shopname", myApp.getShopID());
         shopBranch = chatDB.child(myApp.getShopID());
-        Query queryRef = chatDB.child(myApp.getShopID()).orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
+        Query queryRef = shopBranch.orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
 
         chatMsgHistory = new ArrayList<>(); //this will store the messages sent out to firebase
 
         LinearLayoutManager verticalScroll = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
-        /*TODO: back navigation need some time to figure out
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity*/
-        getSupportActionBar().setTitle(myApp.getShopName());
-        listView = (ListView)findViewById(R.id.list_msg);
-        sendMessage = (Button)findViewById(R.id.button_chatbox_send);
-        sendImage = (ImageView)findViewById(R.id.upload_image);
-        input = (EditText)findViewById(R.id.edittext_chatbox);
+        //TODO: back navigation need some time to figure out
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(myApp.getShopName());
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true); //needed to set up the action bar to display the navigation back button to MainActivity
+        listView = findViewById(R.id.list_msg);
+        sendMessage = findViewById(R.id.button_chatbox_send);
+        sendImage = findViewById(R.id.upload_image);
 
         adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
         listView.setAdapter(adapter);
         progressDialog = new ProgressDialog(this);
-
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.show();
 
         queryRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -125,23 +126,23 @@ public class Chat extends AppCompatActivity {
             }
         });
 
-
+        progressDialog.dismiss();
         sendImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectImage();
                 sentDoNotRefresh = true;
+                lastChatMsg = new ChatMessage (myApp.getUserName(), myApp.getShopName(),"image", getCurrentDate(), getCurrentTime(), true);
             }
             });
 
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lastChatMsg = new ChatMessage(myApp.getShopName(), input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
+                lastChatMsg = new ChatMessage(myApp.getUserName(), myApp.getShopName(), input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
                 chatMsgHistory.add(lastChatMsg);
 
                 adapter.notifyDataSetChanged();
-                //shopBranch.child(getCurrentDate()).push().setValue(chatMessage);
                 shopBranch.push().setValue(lastChatMsg);
 
                 input.setText("");
@@ -242,7 +243,7 @@ public class Chat extends AppCompatActivity {
                 adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
                 listView.setAdapter(adapter);
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageURI);
-                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 00, 200, false);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
                 storeImageToFirebase(resizedBitmap);
             }
             catch (IOException e)
@@ -259,7 +260,7 @@ public class Chat extends AppCompatActivity {
         byte[] bytes = stream.toByteArray();
         String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
         // we finally have our base64 string version of the image, save it.
-        ChatMessage chatImage = new ChatMessage(myApp.getShopID(), true, getCurrentDate(), getCurrentTime(), base64Image);
+        ChatMessage chatImage = new ChatMessage(myApp.getUserName(), myApp.getShopName(), true, getCurrentDate(), getCurrentTime(), base64Image);
         chatMsgHistory.add(chatImage);
         adapter.notifyDataSetChanged();
         shopBranch.push().setValue(chatImage);
