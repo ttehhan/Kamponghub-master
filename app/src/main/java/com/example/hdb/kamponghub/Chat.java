@@ -100,6 +100,7 @@ public class Chat extends AppCompatActivity {
         listView = findViewById(R.id.list_msg);
         sendMessage = findViewById(R.id.button_chatbox_send);
         sendImage = findViewById(R.id.upload_image);
+        input = findViewById(R.id.edittext_chatbox);
 
         adapter = new MessageAdapter(this, R.layout.message_sent, chatMsgHistory);
         listView.setAdapter(adapter);

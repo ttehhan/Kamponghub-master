@@ -140,7 +140,7 @@ public class ChatListingFragment extends Fragment {
     public Query getQuery(DatabaseReference databaseReference) {
         DatabaseReference latestChatList = databaseReference.child("latestChatList");
         Query chatQuery = latestChatList.child(myApp.getUID()).limitToFirst(100);
-        //Query recentStoreQuery = chatDB.child(myApp.getUserName()).limitToFirst(1);
+        //Query chatQuery = latestChatList.child("sender").orderByChild(myApp.getUID()).limitToFirst(100);
         // [END recent_store_query]
         return chatQuery;
     }
