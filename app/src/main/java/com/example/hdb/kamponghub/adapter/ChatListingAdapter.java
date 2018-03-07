@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,13 +49,14 @@ public class ChatListingAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
 
         final DatabaseReference shopRef = getRef(position);
         //final String sender = msg.getSender();
-        final String ShopKey = shopRef.getKey();
+        //final String ShopKey = shopRef.getKey();
+
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                myApp.setShopID(ShopKey);
+                //myApp.setShopID(ShopKey);
+                //Log.d("valerie", ShopKey);
                 Intent i = new Intent((fragment.getActivity()).getApplicationContext(),Chat.class);
                 fragment.startActivity(i);
 

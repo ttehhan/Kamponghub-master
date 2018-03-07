@@ -55,7 +55,7 @@ public class ChatListingFragment extends Fragment {
 
 
     //Firebase variables
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, latestChatDB;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +81,8 @@ public class ChatListingFragment extends Fragment {
         latestMsgList = new ArrayList<>();
 
         // Set up FirebaseRecyclerAdapter with the Query
-
+        latestChatDB = mDatabase.child("latestChatList").child("sender").child(myApp.getUID());
+        getShopID(latestChatDB);
         Query chatQuery = getQuery(mDatabase).limitToFirst(100);
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
                 .setQuery(chatQuery, ChatMessage.class)
@@ -140,6 +141,23 @@ public class ChatListingFragment extends Fragment {
     public Query getQuery(DatabaseReference databaseReference) {
         DatabaseReference latestChatList = databaseReference.child("latestChatList").child("sender").child(myApp.getUID());
         return latestChatList;
+    }
+
+    //Method to get the id of the user sending to the shop
+    public void getShopID(DatabaseReference databaseReference) {
+        databaseReference.child("last").child("receiver").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String shopUID = dataSnapshot.getValue(String.class);
+                myApp.setShopID(shopUID);
+                //myApp.setShopID(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
