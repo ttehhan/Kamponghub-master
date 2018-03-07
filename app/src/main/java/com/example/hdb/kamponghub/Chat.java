@@ -225,12 +225,12 @@ public class Chat extends AppCompatActivity {
     protected void onStop() {
         // call the superclass method first
         super.onStop();
-        latestMsgDB = rootDB.child("latestChatList").child("receiver").child(myApp.getUID());
-        latestMsgDB2 = rootDB.child("latestChatList").child("sender").child(myApp.getShopID());
+        latestMsgDB = rootDB.child("latestChatList").child("receiver").child(myApp.getShopID());
+        latestMsgDB2 = rootDB.child("latestChatList").child("sender").child(myApp.getUID());
         if(sentDoNotRefresh)
         {
-            latestMsgDB.push().setValue(lastChatMsg);
-            latestMsgDB2.push().setValue(lastChatMsg);
+            latestMsgDB.child("last").setValue(lastChatMsg); //needs to set a child name in order to retrieve properly
+            latestMsgDB2.child("last").setValue(lastChatMsg);
         }
     }
 

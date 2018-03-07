@@ -41,7 +41,7 @@ public class ChatListHolder extends RecyclerView.ViewHolder{
     }
     public void bindToList(ChatMessage chatMsg, View.OnClickListener clickListener) {
         //setProfile(chatMsg.getImage());
-        setShopName(chatMsg.getReceiver());
+        setShopName(chatMsg.getReceiverName());
         setDateTime(chatMsg.getDate(), chatMsg.getTime());
         setMsgContent(chatMsg.getMsg()); //gets the latest chat msg
         /*setShopName("ABC 123");
