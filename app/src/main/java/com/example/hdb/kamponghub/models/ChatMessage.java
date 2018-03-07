@@ -12,18 +12,22 @@ public class ChatMessage {
     private String email;
     private String createdAtTime;
     private String createdAtDate;
-    private String sender;
-    private boolean myMsg;
+    private boolean myMsg; //true is user while false is shopowner
     private String image;
-    private String receiverName;
+    private String sender; //sender is the user of the app
+    private String senderName; //senderName is the name of the user sending the msg
+    private String receiver; //receiver is the shopowner of the app
+    private String receiverName; //receiverName is the name of person replying to user
 
 
     public ChatMessage () {
 
     }
 
-    public ChatMessage (String sender, String receiverName, Boolean myMsg, String createdAtDate, String createdAtTime, String image) {
+    public ChatMessage (String sender, String senderName, String receiver, String receiverName, Boolean myMsg, String createdAtDate, String createdAtTime, String image) {
         this.sender = sender;
+        this.senderName = senderName;
+        this.receiver = receiver;
         this.receiverName = receiverName;
         this.image = image;
         this.createdAtDate = createdAtDate;
@@ -31,8 +35,10 @@ public class ChatMessage {
         this.myMsg = myMsg;
     }
 
-    public ChatMessage(String sender, String receiverName, String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
+    public ChatMessage(String sender, String senderName, String receiver, String receiverName, String msg, String createdAtDate, String createdAtTime, Boolean myMsg) {
         this.sender = sender;
+        this.senderName = senderName;
+        this.receiver = receiver;
         this.receiverName = receiverName;
         this.msg = msg;
         this.createdAtDate = createdAtDate;
@@ -44,9 +50,17 @@ public class ChatMessage {
 
     public void setSender(String sender) { this.sender = sender; }
 
-    public String getReceiver() { return receiverName;}
+    public String getSenderName() { return senderName;}
 
-    public void setReceiver(String receiverName) { this.receiverName = receiverName; }
+    public void setSenderName(String senderName) { this.senderName = senderName; }
+
+    public String getReceiver() { return receiver;}
+
+    public void setReceiver(String receiver) { this.receiver = receiver; }
+
+    public String getReceiverName() { return receiverName;}
+
+    public void setReceiverName(String receiverName) { this.receiverName = receiverName; }
 
     public String getMsg() {return msg;}
 

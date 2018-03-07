@@ -61,7 +61,7 @@ public class Chat extends AppCompatActivity {
     private ArrayAdapter<ChatMessage> adapter;
     boolean myMsg = true;
     private DatabaseReference rootDB, chatDB,shopBranch;
-    private DatabaseReference latestMsgDB; //stores only the latest message to display in chatListing
+    private DatabaseReference latestMsgDB, latestMsgDB2; //stores only the latest message to display in chatListing
     private ChatMessage lastChatMsg;
     private MyApplication myApp;
     private String userID;
@@ -82,9 +82,7 @@ public class Chat extends AppCompatActivity {
         userID = myApp.getUID();
 
         rootDB = FirebaseDatabase.getInstance().getReference(); //this gets a reference of the root database
-        Log.d("username", userID);
         chatDB = rootDB.child("chatHistory").child(userID);
-        Log.d("shopname", myApp.getShopID());
         shopBranch = chatDB.child(myApp.getShopID());
         Query queryRef = shopBranch.orderByKey(); //query from firebase to retrieve only chatMessages based on shop name
 
@@ -133,14 +131,14 @@ public class Chat extends AppCompatActivity {
             public void onClick(View view) {
                 selectImage();
                 sentDoNotRefresh = true;
-                lastChatMsg = new ChatMessage (myApp.getUserName(), myApp.getShopName(),"image", getCurrentDate(), getCurrentTime(), true);
+                lastChatMsg = new ChatMessage (myApp.getUID(), myApp.getUserName(), myApp.getShopID(), myApp.getShopName(), "image", getCurrentDate(), getCurrentTime(), true);
             }
             });
 
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lastChatMsg = new ChatMessage(myApp.getUserName(), myApp.getShopName(), input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
+                lastChatMsg = new ChatMessage(myApp.getUID(), myApp.getUserName(), myApp.getShopID(), myApp.getShopName(), input.getText().toString(),getCurrentDate(), getCurrentTime(), true);
                 chatMsgHistory.add(lastChatMsg);
 
                 adapter.notifyDataSetChanged();
@@ -227,10 +225,12 @@ public class Chat extends AppCompatActivity {
     protected void onStop() {
         // call the superclass method first
         super.onStop();
-        latestMsgDB = rootDB.child("latestChatList").child(myApp.getUID());
+        latestMsgDB = rootDB.child("latestChatList").child("receiver").child(myApp.getUID());
+        latestMsgDB2 = rootDB.child("latestChatList").child("sender").child(myApp.getShopID());
         if(sentDoNotRefresh)
         {
-            latestMsgDB.child(myApp.getShopID()).setValue(lastChatMsg);
+            latestMsgDB.push().setValue(lastChatMsg);
+            latestMsgDB2.push().setValue(lastChatMsg);
         }
     }
 
@@ -261,7 +261,7 @@ public class Chat extends AppCompatActivity {
         byte[] bytes = stream.toByteArray();
         String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
         // we finally have our base64 string version of the image, save it.
-        ChatMessage chatImage = new ChatMessage(myApp.getUserName(), myApp.getShopName(), true, getCurrentDate(), getCurrentTime(), base64Image);
+        ChatMessage chatImage = new ChatMessage(myApp.getUID(), myApp.getUserName(), myApp.getShopID(), myApp.getShopName(), true, getCurrentDate(), getCurrentTime(), base64Image);
         chatMsgHistory.add(chatImage);
         adapter.notifyDataSetChanged();
         shopBranch.push().setValue(chatImage);

@@ -67,6 +67,7 @@
         </activity>
         <activity android:name=".HomePage" />
         <activity android:name=".Register" />
+        <activity android:name=".FacebookRegisterActivity"></activity>
         <activity
             android:name=".Chat"
             android:windowSoftInputMode="stateHidden|adjustResize" />
@@ -96,8 +97,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity android:name=".FacebookRegisterActivity"></activity>
     </application>
 
 </manifest>

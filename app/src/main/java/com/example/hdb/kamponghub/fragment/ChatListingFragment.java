@@ -82,7 +82,7 @@ public class ChatListingFragment extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
 
-        Query chatQuery = getQuery(mDatabase);
+        Query chatQuery = getQuery(mDatabase).limitToFirst(100);
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
                 .setQuery(chatQuery, ChatMessage.class)
                 .build();
@@ -138,11 +138,8 @@ public class ChatListingFragment extends Fragment {
 
     //Method can be placed in inherited class later on
     public Query getQuery(DatabaseReference databaseReference) {
-        DatabaseReference latestChatList = databaseReference.child("latestChatList");
-        Query chatQuery = latestChatList.child(myApp.getUID()).limitToFirst(100);
-        //Query chatQuery = latestChatList.child("sender").orderByChild(myApp.getUID()).limitToFirst(100);
-        // [END recent_store_query]
-        return chatQuery;
+        DatabaseReference latestChatList = databaseReference.child("latestChatList").child("sender").child(myApp.getUID());
+        return latestChatList;
     }
 
 }

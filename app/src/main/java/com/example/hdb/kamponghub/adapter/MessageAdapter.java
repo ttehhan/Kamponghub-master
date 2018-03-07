@@ -68,7 +68,7 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
             holder.msg.setText(chatMessage.getMsg());
             holder.msgTime.setText(chatMessage.getDate() + ", " + chatMessage.getTime());
             if (!chatMessage.getMsgType()) {
-                holder.name.setText(chatMessage.getSender());
+                holder.name.setText(chatMessage.getReceiverName());
             }
         }
 
