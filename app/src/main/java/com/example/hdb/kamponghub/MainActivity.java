@@ -128,8 +128,10 @@ public class MainActivity extends AppCompatActivity {
        //For Test
         if(TextUtils.isEmpty(email) && (TextUtils.isEmpty(password)))
         {
-            email = "tester2@test.com";
-            password ="123456";
+         /*   email = "tester2@test.com";
+            password ="123456";*/
+            email = "user@user.com";
+            password ="password";
         }
         /*if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter a valid email address",Toast.LENGTH_LONG).show();
