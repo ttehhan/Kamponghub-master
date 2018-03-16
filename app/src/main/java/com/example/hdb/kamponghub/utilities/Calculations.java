@@ -6,16 +6,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 public class Calculations {
+
+    private static String latitude;
+    private static String longitude;
 
     public static String calcShopOpen(String timeStart, String timeEnd, String currentTime){
         //TODO: Calculate is shop open
@@ -343,20 +351,26 @@ public class Calculations {
 
     public static LatLng getLatLngFromPostal(Context context, String postalCode){
         Geocoder coder = new Geocoder(context);
-        List<Address> address;
+        List<Address> listAddress;
         LatLng p1 = null;
 
         try {
             // May throw an IOException
-            address = coder.getFromLocationName(postalCode+"Singapore", 5);
-              if (address == null) {
-                return null;
-            }
-            Address location = address.get(0);
-            location.getLatitude();
-            location.getLongitude();
+            listAddress = coder.getFromLocationName(postalCode+"Singapore", 5);
+            if(listAddress.size()>0) {
+                Address location = listAddress.get(0);
+                location.getLatitude();
+                location.getLongitude();
 
-            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+                p1 = new LatLng(location.getLatitude(), location.getLongitude());
+
+            }
+            else{
+                new GetCoordinates().execute(postalCode+"+ Singapore");
+                double lat = Double.parseDouble(latitude);
+                double lng = Double.parseDouble(longitude);
+                p1 = new LatLng(lat, lng);
+            }
 
         } catch (IOException ex) {
 
@@ -369,5 +383,45 @@ public class Calculations {
         boolean valid = false;
 
         return valid;
+    }
+    private static class GetCoordinates extends AsyncTask<String,Void,String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response;
+            try{
+                String address = strings[0];
+                HttpDataHandler http = new HttpDataHandler();
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s",address);
+                response = http.getHTTPData(url);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                JSONObject jsonObject = new JSONObject(s);
+
+                latitude = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                        .getJSONObject("location").get("lat").toString();
+                longitude = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                        .getJSONObject("location").get("lng").toString();
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

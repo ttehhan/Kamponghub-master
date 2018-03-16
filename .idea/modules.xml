@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://D:\APROJECTS\android\Kamponghub-master\Kamponghub-.iml" filepath="D:\APROJECTS\android\Kamponghub-master\Kamponghub-.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Kamponghub-master.iml" filepath="$PROJECT_DIR$/.idea/Kamponghub-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Kamponghub-master.iml" filepath="$PROJECT_DIR$/Kamponghub-master.iml" />
+      <module fileurl="file://D:\Program Files\Github\Kamponghub-master\.idea\Kamponghub-master.iml" filepath="D:\Program Files\Github\Kamponghub-master\.idea\Kamponghub-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
