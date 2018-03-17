@@ -83,7 +83,7 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
     private String mShopKey;
     private String mZoneKey;
     private String shopLatitude, shopLongtitude;
-    private String myLatitude, myLongtitude;
+    private String myLatitude="1.4535819", myLongtitude="103.8015164";
     private String phone;
     private MyApplication myApp;
 
@@ -320,8 +320,10 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
             }
         locationManager.requestLocationUpdates(bestProvider, 5000, 0, this);
             if (loc != null) {
-            myLatitude = String.valueOf(loc.getLatitude());
-            myLongtitude = String.valueOf(loc.getLongitude());
+        /*    myLatitude = String.valueOf(loc.getLatitude());
+                myLongtitude = String.valueOf(loc.getLongitude());*/
+            myLatitude = "1.4535819";
+                myLongtitude = "103.8015164";
             }
         } catch (SecurityException e) {    }
     }
@@ -389,8 +391,10 @@ public class ShopDetailFragment extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        myLatitude = String.valueOf(location.getLatitude());
-        myLongtitude = String.valueOf(location.getLongitude());
+/*        myLatitude = String.valueOf(location.getLatitude());
+        myLongtitude = String.valueOf(location.getLongitude());*/
+        myLatitude = "1.4535819";
+        myLongtitude = "103.8015164";
     }
 
     @Override
